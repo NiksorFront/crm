@@ -1,13 +1,28 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vite + React + TS</title>
+    </head>
+    <body class="flex flex-wrap bg-gray-50 dark:bg-gray-900">
+        <!-- Форма входа -->
+        <div id="sing-in" class="flex flex-col items-center justify-center px-6 py-8 w-11/12 mx-auto md:h-screen lg:py-0 hidden">
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <form class="space-y-4 md:space-y-6" action="#">
+                        <button type="button" id="sing-in__submit"  class="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                            Вход
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <header id="header" class="flex w-screen h-24 items-center justify-between bg-slate-100"></header>
+        <main id="main" class="flex flex-nowrap w-screen custom-main-height"></main>
+
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
 </html>
