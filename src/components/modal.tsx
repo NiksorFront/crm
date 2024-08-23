@@ -7,10 +7,16 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "./ui/dialog"
+import BodyDelete from "./modal-bodys/body-delete.tsx";
+import { Button } from "./ui/button";
+import BodyResetPassword from "./modal-bodys/body-reset-password.tsx";
+import BodyAdd from "./modal-bodys/body-add.tsx";
 
-type modalType = {openingButton: React.ReactNode, endpointForSubmit: string};
+type modalType = {openingButton: React.ReactNode, title: string, type: string, endpointForSubmit: string, id?: number | string};
 
-export default function Modal({openingButton, endpointForSubmit}: modalType){
+
+
+export default function Modal({openingButton, title, type, endpointForSubmit, id}: modalType){
     const refi = useRef(null);
 
     return(<Dialog>
@@ -19,9 +25,12 @@ export default function Modal({openingButton, endpointForSubmit}: modalType){
         }</DialogTrigger>
         <DialogContent>
             <DialogHeader>
-                <DialogTitle>Модальное окно</DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
                 <DialogDescription>
-                {endpointForSubmit}
+                    {type === "delete" ? <BodyDelete className="w-full mt-5" /> : 
+                    type === "resetPassword" ? <BodyResetPassword className="w-full mt-10 flex flex-wrap flex-end"/> :
+                    type === "add" ? <BodyAdd endpointForSubmit={endpointForSubmit} className="flex flex-wrap gap-1 mt-5"/> :
+                    <p>{endpointForSubmit}</p>}
                 </DialogDescription>
             </DialogHeader>
         </DialogContent>

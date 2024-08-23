@@ -66,7 +66,9 @@ const router = createBrowserRouter([
       title="Типы устройств" 
       endpoint="crm/devices/ajax?action=getTypes"
       exceptions={["type"]}
-      endpointForAdd="crm/devices/ajax/post?action=insertDeviceType" />
+      endpointForAdd="crm/devices/ajax/post?action=insertDeviceType" 
+      endpointForEdit="тут будет url"
+      endpointForDelete="crm/devices/ajax/delete?action=deleteDeviceType"/> //Только id нужно
     ),
   },
   {
@@ -74,7 +76,10 @@ const router = createBrowserRouter([
     element: Wrapper(<TablePage 
       title="Марки устройства" 
       endpoint="crm/devices/ajax?action=getVendors" 
-      endpointForAdd="crm/devices/ajax/post?action=insertDeviceVendor"/>
+      endpointForAdd="crm/devices/ajax/post?action=insertDeviceVendor"
+      endpointForEdit="тут будет url"
+      endpointForDelete="crm/devices/ajax/delete?action=deleteDeviceVendor" //Только id нужно
+      />
     ),
   },
   {
@@ -90,13 +95,16 @@ const router = createBrowserRouter([
       title="Физические лица" 
       endpoint="personal/users/ajax/get?action=getUsers" 
       exceptions={["id"]}
+      endpointForEdit="тут будет url"
+      endpointForResetPassword="personal/users/ajax/post?action=newUserPassword" //"data":{"email":"user@mail.ru","phone":null,"newPassword":"123"}
       />
     ),
   },
   {
     path: "directLegalEntities/",
     element: Wrapper(<TablePage 
-      title="Юридические лица" 
+      title="Юридические лица"
+      endpointForEdit="тут будет url"
       endpoint="personal/company/ajax/get?action=getCompanies" 
       exceptions={["id"]}
       />

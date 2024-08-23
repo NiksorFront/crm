@@ -10,8 +10,13 @@ function getResponse(res) {
 }
 
 async function gettingData(endpoint: string) {
-  const res = await fetch(PATH + endpoint);
+  // const res = await fetch("https://jsonplaceholder.typicode.com/todos/1", {
+  const res = await fetch(PATH + endpoint, {
+    method: "GET",
+    // method: "HEAD",
+  });
 
+  // await getResponse(res).then((rs) => console.log(rs.body));
   return await getResponse(res);
   // return await getResponse(res);
 }

@@ -1,5 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-
+import {Fragment} from "react";
+import { Button } from "@/components/ui/button";
+import { Pencil, KeyRound, Trash2 } from "lucide-react";
+import Modal from "../../components/modal";
 
 function whatHeader(key: string): string {
   // prettier-ignore
@@ -18,8 +21,9 @@ function whatHeader(key: string): string {
          key === "address" ? "юридический адрес" :
          key === "short_name" ? "краткое название" :
          key === "display_type" ? "тип" :
+         key === "actionBtns" ? "Действия" :
         //  key === "type" ? "тип" :
-          key;
+         key;
 }
 
 function whatColor(key: string): object{
@@ -39,11 +43,11 @@ function whatColor(key: string): object{
 
 
 //Это список приоритеных AccessorKey. Чем раньше стоит ключ, тем раньше мы его увидим в любой из таблиц 
-const priorityAccessorKey = ["id", "createdAt", "phone", "creator", "inn", "name", "full_name", "directorFullName", "email", "address", "short_name", "display_type", "device", "status", "kpp",];
+const priorityAccessorKey = ["id", "createdAt", "creator", "inn", "name", "full_name", "directorFullName", "phone", "email", "address", "short_name", "display_type", "device", "status", "kpp",];
 
 
 
-type columnType = Array<{ accessorKey: string; header: string }>;
+type columnType = Array<{ accessorKey: string; header: string, size?:number }>;
 function sortColumnsByPriority(columns: columnType) {
   return columns.sort((a, b) => {
       const priorityA = priorityAccessorKey.indexOf(a.accessorKey);
@@ -57,6 +61,37 @@ function sortColumnsByPriority(columns: columnType) {
   });
 }
 
+type btnGroupType = {rowInfo: {original: {actionBtns:[{edit: string, resetPassword: string, delete: string}], id?: number | string}}};
+function ButtonGroup({rowInfo}: btnGroupType){
+    // console.log(rowInfo);
+
+    return (
+    <div className="flex gap-2"> 
+      {rowInfo.original.actionBtns.map((item, i) => (
+        <Fragment key={i}>
+          {item.edit && <Modal openingButton={<Button variant={"secondary"}><Pencil size={16}/></Button>} 
+                               title="Редактирование данных" type="edit" 
+                               endpointForSubmit={item.edit} 
+                               id={rowInfo.original.id}
+                               />
+          }
+          {item.resetPassword && <Modal openingButton={<Button variant={"secondary"}><KeyRound size={16}/></Button>} 
+                                        title="Смена пароля" type="resetPassword" 
+                                        endpointForSubmit={item.resetPassword}
+                                        id={rowInfo.original.id}
+                                        />
+          }
+          {item.delete && <Modal openingButton={<Button variant={"secondary"}><Trash2 size={16}/></Button>} 
+                                 title="Удаление" type="delete" 
+                                 endpointForSubmit={item.delete}
+                                 id={rowInfo.original.id}
+                                 />
+          }
+        </Fragment>
+      ))}
+    </div>)
+}
+
 //"id", "name", "createdAt",  "status"
 //ColumnDef[]
 
@@ -66,20 +101,18 @@ export default function generateColumns(exampleColumn: object, exceptions: Array
     Object.keys(exampleColumn).forEach((key) => {
         if(!exceptions.some((exception) => exception === key)){
           if(key === "status"){
-            columns.push({ accessorKey: key, header: whatHeader(key),
-              //@ts-ignore
-              cell: ({row}) => {return <div style={whatColor(row.original.status)}>{row.original.status}</div>} 
-            });
+             //@ts-ignore
+            columns.push({ accessorKey: key, header: whatHeader(key), cell: ({row}) => {return <div style={whatColor(row.original.status)}>{row.original.status}</div>} });
           }else if(key === "device") {
-            columns.push({ accessorKey: key, header: whatHeader(key),
-              //@ts-ignore
-              cell: ({row}) => {
-                // console.log(row.original.device)
-                return <div>{`${row.original.device.type} ${row.original.device.vendor}`}</div>
-              } 
-            });
-          }else{
-            columns.push({ accessorKey: key, header: whatHeader(key) });
+             //@ts-ignore
+            columns.push({ accessorKey: key, header: whatHeader(key), cell: ({row}) => {return <div>{`${row.original.device.type} ${row.original.device.vendor}`}</div>} });
+          }else if(key === "actionBtns") {
+           columns.push({ accessorKey: key, header: whatHeader(key),
+            //@ts-ignore
+            cell: ({row}) => {return <ButtonGroup rowInfo={row}/> }, size: 100,     // задаёт точную ширину в пикселях 
+          });
+         }else{
+            columns.push({ accessorKey: key, header: whatHeader(key)});
           }
         }
     });
