@@ -22,10 +22,28 @@ function whatHeader(key: string): string {
           key;
 }
 
+function whatColor(key: string): object{
+  //https://snipp.ru/handbk/html-colors - название цветов брал тут
+  return key === "Завершено" ? {filter: "drop-shadow(0 0 10px)"} :
+         key === "Приемка" ? {filter: "drop-shadow(0 0 10px LemonChiffon)"} : 
+         key === "Диагностика" ? {filter: "drop-shadow(0 0 10px Moccasin)"} :
+         key === "Проценка" ? {filter: "drop-shadow(0 0 10px Khaki)"} :
+         key === "Согласование" ? {filter: "drop-shadow(0 0 10px LightSalmon)"} :
+         key === "Проверка оплаты" ? {filter: "drop-shadow(0 0 10px Coral)"} : //status === "Проверка" Проверка оплаты возможно неверно
+         key === "Заказ запчастей" ? {filter: "drop-shadow(0 0 10px YellowGreen)"} : 
+         key === "Ремонт" ? {filter: "drop-shadow(0 0 10px GreenYellow)"} : 
+         key === "Подготовка документов" ? {filter: "drop-shadow(0 0 10px LawnGreen)"}  : 
+         key === "Подтверждение документов" ? {filter: "drop-shadow(0 0 10px Lime)"} : {filter: "drop-shadow(0 0 10px purple)"};
+}
 
-type columnType = Array<{ accessorKey: string; header: string }>;
+
+
 //Это список приоритеных AccessorKey. Чем раньше стоит ключ, тем раньше мы его увидим в любой из таблиц 
 const priorityAccessorKey = ["id", "createdAt", "phone", "creator", "inn", "name", "full_name", "directorFullName", "email", "address", "short_name", "display_type", "device", "status", "kpp",];
+
+
+
+type columnType = Array<{ accessorKey: string; header: string }>;
 function sortColumnsByPriority(columns: columnType) {
   return columns.sort((a, b) => {
       const priorityA = priorityAccessorKey.indexOf(a.accessorKey);
@@ -45,28 +63,26 @@ function sortColumnsByPriority(columns: columnType) {
 export default function generateColumns(exampleColumn: object, exceptions: Array<string>): columnType {
   let columns: columnType = [];
   if (exampleColumn !== undefined) {
-    if (exceptions.length === 0){
-      Object.keys(exampleColumn).forEach((key) => {
-        columns.push({ 
-          accessorKey: key, 
-          header: whatHeader(key),
-          // cell: ({ row }) => {
-          //   console.log(row.original);
-      
-          //   return <div className="text-right font-medium">{123}</div>
-          // },
-        });
-      });
-    }else{
-      Object.keys(exampleColumn).forEach((key) => {
+    Object.keys(exampleColumn).forEach((key) => {
         if(!exceptions.some((exception) => exception === key)){
-          columns.push({ 
-            accessorKey: key, 
-            header: whatHeader(key),
-          });
+          if(key === "status"){
+            columns.push({ accessorKey: key, header: whatHeader(key),
+              //@ts-ignore
+              cell: ({row}) => {return <div style={whatColor(row.original.status)}>{row.original.status}</div>} 
+            });
+          }else if(key === "device") {
+            columns.push({ accessorKey: key, header: whatHeader(key),
+              //@ts-ignore
+              cell: ({row}) => {
+                // console.log(row.original.device)
+                return <div>{`${row.original.device.type} ${row.original.device.vendor}`}</div>
+              } 
+            });
+          }else{
+            columns.push({ accessorKey: key, header: whatHeader(key) });
+          }
         }
-      });
-    }
+    });
   }
 
   return sortColumnsByPriority(columns);;

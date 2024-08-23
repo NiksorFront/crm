@@ -34,7 +34,7 @@ createRoot(document.getElementById("header")!).render(<Header />);
 //   </StrictMode>,
 // );
 
-function Wrapper(element) {
+function Wrapper(element: React.ReactNode) {
   return (
     <>
       <section id="menu" className="w-2/12 md:w-fit max-w-56 bg-slate-100">
@@ -55,30 +55,52 @@ const router = createBrowserRouter([
   },
   {
     path: "completedRequests/",
-    // prettier-ignore
-    element: Wrapper(<TablePage title="Завершённые заявки" endpoint="crm/tickets/ajax?action=getCompletedTickets" />,),
+    element: Wrapper(<TablePage 
+      title="Завершённые заявки" 
+      endpoint="crm/tickets/ajax?action=getCompletedTickets"/>
+    ),
   },
   {
     path: "deviceTypes/",
-    element: Wrapper(<TablePage title="Типы устройств" endpoint="crm/devices/ajax?action=getTypes" exceptions={["type"]} />),
+    element: Wrapper(<TablePage 
+      title="Типы устройств" 
+      endpoint="crm/devices/ajax?action=getTypes"
+      exceptions={["type"]}
+      endpointForAdd="crm/devices/ajax/post?action=insertDeviceType" />
+    ),
   },
   {
     path: "deviceVendors/",
-    element: Wrapper(<TablePage title="Марки устройства" endpoint="crm/devices/ajax?action=getVendors" />),
+    element: Wrapper(<TablePage 
+      title="Марки устройства" 
+      endpoint="crm/devices/ajax?action=getVendors" 
+      endpointForAdd="crm/devices/ajax/post?action=insertDeviceVendor"/>
+    ),
   },
   {
     path: "devices/",
-    element: Wrapper(<TablePage title="Устройства" endpoint="" />),
+    element: Wrapper(<TablePage 
+      title="Устройства" 
+      endpoint="" />
+    ),
   },
   {
     path: "directIndividuals/",
-    // prettier-ignore
-    element: Wrapper(<TablePage title="Физические лица" endpoint="personal/users/ajax/get?action=getUsers" exceptions={["id"]} />),
+    element: Wrapper(<TablePage 
+      title="Физические лица" 
+      endpoint="personal/users/ajax/get?action=getUsers" 
+      exceptions={["id"]}
+      />
+    ),
   },
   {
     path: "directLegalEntities/",
-    // prettier-ignore
-    element: Wrapper(<TablePage title="Юридические лица" endpoint="personal/company/ajax/get?action=getCompanies" exceptions={["id"]} />),
+    element: Wrapper(<TablePage 
+      title="Юридические лица" 
+      endpoint="personal/company/ajax/get?action=getCompanies" 
+      exceptions={["id"]}
+      />
+    ),
   },
   {
     path: "*",
