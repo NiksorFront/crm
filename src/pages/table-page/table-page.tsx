@@ -4,7 +4,6 @@ import { gettingData } from "../../utils/api.ts";
 import { useQuery } from "react-query";
 import { Plus } from "lucide-react";
 import { Button } from "../../components/ui/button.tsx";
-import { DialogTrigger } from "@/components/ui/dialog.tsx";
 import Modal from "@/components/modal.tsx";
 
 // asunc

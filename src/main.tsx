@@ -1,4 +1,3 @@
-import { Component, ComponentElement, ComponentType, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import Header from "./components/header.tsx";
 import TablePage from "./pages/table-page/table-page.tsx";

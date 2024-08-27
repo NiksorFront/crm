@@ -1,12 +1,12 @@
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
+  // NavigationMenuIndicator,
   NavigationMenuItem,
-  NavigationMenuLink,
+  // NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
+  // NavigationMenuViewport,
 } from "./ui/navigation-menu";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";

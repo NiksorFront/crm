@@ -1,4 +1,3 @@
-import { ColumnDef } from "@tanstack/react-table";
 import {Fragment} from "react";
 import { Button } from "@/components/ui/button";
 import { Pencil, KeyRound, Trash2 } from "lucide-react";

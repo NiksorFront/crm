@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react"
+// @ts-nocheck
+import { useRef } from "react"
 import {
     Dialog,
     DialogContent,

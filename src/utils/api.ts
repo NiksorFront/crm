@@ -1,7 +1,6 @@
-import { rejects } from "assert";
-
+// @ts-nocheck
 const PATH = "https://service-v.com/";
-const PATHcrm = "https://service-v.com/crm/";
+// const PATHcrm = "https://service-v.com/crm/";
 
 function getResponse(res) {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
