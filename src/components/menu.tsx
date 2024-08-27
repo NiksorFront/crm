@@ -23,11 +23,17 @@ export default function MenuMain() {
   const routeToIndividuals = () => navigate("/directIndividuals/");
   const routeToDirectLegal = () => navigate("/directLegalEntities/");
 
+  const routeToCreateRequst = () => navigate("/сreateRequest/");
+  const routeToCreateRequstEdited = () => navigate("/сreateRequestEdited/");
+
   return (
     <NavigationMenu className="clearLeft">
       <NavigationMenuList className="flex-col my-2 justify-start items-start">
-        <Button variant="ghost" className="gap-2 text-wrap px-5">
+        <Button variant="ghost" className="gap-2 text-wrap px-5" onClick={routeToCreateRequst}>
           <ListPlus size={16} /> Создать заявку
+        </Button>
+        <Button variant="ghost" className="gap-2 text-wrap" onClick={routeToCreateRequstEdited}>
+          Настройки созд. заявок
         </Button>
         <Button variant="ghost" className="gap-3" onClick={routeToRequsts}>
           {/* <AlignJustify size={12} strokeWidth={3} /> */}
@@ -89,6 +95,7 @@ export default function MenuMain() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         {/* <Button variant="ghost">Настройки</Button> */}
+        {/* <Button variant="ghost">Настройки создания заяков</Button> */}
       </NavigationMenuList>
     </NavigationMenu>
   );

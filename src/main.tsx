@@ -7,6 +7,8 @@ import "normalize.css";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import CreateRequestPage from "./pages/create-request-page.tsx";
+import CreateRequestEditedPage from "./pages/create-request-edited-page.tsx";
 
 const userAuthorized = true; //Тут через post с AuthorizedToken будем получать данные авторизован ппользователь или нет
 
@@ -109,6 +111,14 @@ const router = createBrowserRouter([
       exceptions={["id"]}
       />
     ),
+  },
+  {
+    path: "сreateRequest/",
+    element: Wrapper(<CreateRequestPage/>),
+  },
+  {
+    path: "сreateRequestEdited/",
+    element: Wrapper(<CreateRequestEditedPage/>)
   },
   {
     path: "*",

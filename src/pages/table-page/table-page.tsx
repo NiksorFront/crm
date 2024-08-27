@@ -22,6 +22,7 @@ export default function TablePage({title, endpoint, exceptions=[], endpointForAd
   // }, [endpoint]);
   let exampleColumns = data ? {...data[0]} : {};
   if(data){
+    
     if (endpointForEdit || endpointForResetPassword || endpointForDelete){
       exampleColumns.actionBtns = "actionBtns";  //Добавляем столбец для Кнопок
       data.forEach((row: {}) => Object.assign(row, {actionBtns: []})); //Добавляем массив, куда будут записываться какие кнопки надо отобразить
@@ -38,14 +39,14 @@ export default function TablePage({title, endpoint, exceptions=[], endpointForAd
   isLoading && <p className="text-3xl text-gray-900 dark:text-white">Загрузка</p>;
 
   error && <p className="text-3xl text-red-600">Ошибка получения данных</p>;
-
+  //Поправить, что у нас Потом кнопки кнопка епта в Modal
   return (
     <div className="container mx-auto py-10">
       <div className="py-4 flex justify-between">
         <h1 className="text-2xl text-left m-0">{title}</h1>
-        {endpointForAdd !== "" && <Modal openingButton={<Button variant="secondary" className="gap-2"><Plus/>Добавить</Button>}
-                                         title="Добавление" type="add"
-                                         endpointForSubmit={endpointForAdd}/> }
+        {endpointForAdd !== "" && <Modal title="Добавление" type="add" endpointForSubmit={endpointForAdd}>
+                                          <Button variant="secondary" className="gap-2"><Plus/>Добавить</Button>
+                                  </Modal> }
         {/* <Button variant="secondary" className="gap-2"><Plus/>Добавить</Button> */}
       </div>
       {data && <DataTable columns={generateColumns(exampleColumns, exceptions)} data={data}/>}
