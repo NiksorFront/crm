@@ -26,13 +26,13 @@ export default function ElementsLibraryDrawer({children}: {children: React.React
             <DrawerTitle className="text-center">Выберите элемент</DrawerTitle>
             {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
           </DrawerHeader>
-          <DrawerFooter className="flex flex-wrap flex-row gap-10 justify-center">
-            <Inpt></Inpt>
-            <InptBig></InptBig>
-            <CombBox ></CombBox>
-            <BtnSubmit></BtnSubmit>
-            <BtnPdf></BtnPdf>
-            <Button className="w-80" disabled={true}>eввод почты</Button>
+          <DrawerFooter className="flex flex-wrap flex-row gap-10 justify-center items-center">
+            <Inpt className="w-80" title="ввод"></Inpt>
+            <InptBig className="w-80" title="ввод побольше"></InptBig>
+            <CombBox className="w-80" title="список" rowsToChoose={["строка 1", "строка 2", "строка 3"]}></CombBox>
+            <BtnSubmit className="w-80" variant={"outline"}>кнопка</BtnSubmit>
+            <BtnPdf className="w-80" variant={"outline"} pdfGenerateCode={() => console.log("генерация")}>скачать pdf</BtnPdf>
+            <Button className="w-80" disabled={true}>ввод почты</Button>
             <Button className="w-80" disabled={true}>выбор типа</Button>
             <Button className="w-80" disabled={true}>ввод телефона</Button>
             <Button className="w-80" disabled={true}>ввод ещё чего-то</Button>

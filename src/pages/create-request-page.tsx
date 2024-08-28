@@ -1,9 +1,29 @@
 import { useStore, TabType, ElementType } from "@/utils/store";
 import "./create-request-pages.css";
 import { Button } from "@/components/ui/button";
+import Inpt from "@/components/elements/inpt";
+import InptBig from "@/components/elements/inptBig";
+import CombBox from "@/components/elements/combBox";
+import BtnSubmit from "@/components/elements/btnSubmit";
+import BtnPdf from "@/components/elements/btnPdf";
 
 function Element({element}: {element: ElementType}){
   const [typeElem, id] = element.id.split("-")
+
+  const elementPosition = {gridRow: `${element.pos.row}`, gridColumn: `${element.pos.col}`};
+
+  switch(typeElem){
+    case "inpt":
+      return <Inpt title={element.title} id={id} placeholder={element.placeholder} disabled={element.disabled} style={elementPosition}/>
+    case "inptBig":
+      return <InptBig title={element.title} id={id} placeholder={element.placeholder} disabled={element.disabled} style={elementPosition}/>
+    case "combBox": 
+      return <CombBox title={element.title} placeholder={element.placeholder} urlToGetRows={element.urlRequestValues} disabled={element.disabled} style={elementPosition}/>
+    case "btnSubmit":
+      return <BtnSubmit variant={"secondary"} style={elementPosition}>{element.title}</BtnSubmit>
+    case "btnPdf":
+      return <BtnPdf variant={"outline"} pdfGenerateCode={() => console.log("скачено")} disabled={element.disabled} style={elementPosition}>{element.title}</BtnPdf>
+  }
   //По этим typeElem и id надо найти элементы в базе элементов
   return <p key={id}>{`${typeElem} ${id}`}</p>
 }
@@ -20,7 +40,7 @@ export default function CreateRequestPage() {
 
   return (
     <div className="flex flex-wrap"> 
-      <h1 className="text-2xl m-10 w-full">{settings.title}</h1>
+      <h1 className="text-2xl mx-10 my-8 w-full">{settings.title}</h1>
       <div className="flex flex-wrap w-full ml-10 mr-auto">
         <div className="">
           <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500">
@@ -35,7 +55,21 @@ export default function CreateRequestPage() {
       </div>
       <div className="p-4 my-2 mx-10 w-full bg-white rounded-lg shadow ">
           { 
-            settings.tabs && Object.keys(settings.tabs).map(tab => <TabContent tab={settings.tabs[tab]}/>)
+            settings.tabs && Object.keys(settings.tabs).map(tab => {
+              //@ts-ignore
+              const tabInfo: TabType = settings.tabs[tab];
+
+              //В идеале сделать тоже самое для строк
+
+              let widthColumn = `${1 / Number(tabInfo.columns)}`.substring(2); //Высчитваем столько процентов ширины нам надо
+              widthColumn.length === 1 ? widthColumn += "0" : widthColumn = widthColumn.substring(0, 2);
+
+              console.log(widthColumn, 1 % Number(tabInfo.columns));
+              return <div className={`grid  gap-4`} 
+                          style={{gridTemplateColumns: `repeat(${tabInfo.columns}, minmax(0, ${widthColumn}%)`,}} >
+                      <TabContent tab={tabInfo}/>
+                    </div>}
+            )
           }
       </div>
     </div>
