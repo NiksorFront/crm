@@ -8,6 +8,13 @@ import {
     DrawerTitle,
     DrawerTrigger,
   } from "@/components/ui/drawer";
+
+import Inpt from "./elements/inpt";
+import InptBig from "./elements/inptBig";
+import CombBox from "./elements/combBox";
+import BtnSubmit from "./elements/btnSubmit";
+import BtnPdf from "./elements/btnPdf";
+
 import { Button } from "./ui/button";
   
 export default function ElementsLibraryDrawer({children}: {children: React.ReactNode}){
@@ -20,16 +27,16 @@ export default function ElementsLibraryDrawer({children}: {children: React.React
             {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
           </DrawerHeader>
           <DrawerFooter className="flex flex-wrap flex-row gap-10 justify-center">
-            <Button className="w-80">выбор марки</Button>
-            <Button className="w-80">элемент</Button>
-            <Button className="w-80">описание</Button>
-            <Button className="w-80">кнопка</Button>
-            <Button className="w-80">отправка</Button>
-            <Button className="w-80">ввод почты</Button>
-            <Button className="w-80">выбор типа</Button>
-            <Button className="w-80">ввод телефона</Button>
-            <Button className="w-80">ввод ещё чего-то</Button>
-            <Button className="w-80">элемент</Button>
+            <Inpt></Inpt>
+            <InptBig></InptBig>
+            <CombBox ></CombBox>
+            <BtnSubmit></BtnSubmit>
+            <BtnPdf></BtnPdf>
+            <Button className="w-80" disabled={true}>eввод почты</Button>
+            <Button className="w-80" disabled={true}>выбор типа</Button>
+            <Button className="w-80" disabled={true}>ввод телефона</Button>
+            <Button className="w-80" disabled={true}>ввод ещё чего-то</Button>
+            <Button className="w-80" disabled={true}>элемент</Button>
             
             {/* <DrawerClose>
               <Button variant="outline">Cancel</Button>

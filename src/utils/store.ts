@@ -4,6 +4,8 @@ import { create } from "zustand";
 export type ElementType = {
   id: string;
   pos: { row: number; col: number };
+  placeholder?: string;
+  urlRequestValues?: string;
   submitUrl?: string;
   acceptedValues?: Array<string>;
 };
@@ -40,26 +42,32 @@ export const useStore = create<storeType>((set) => ({
           element1: {
             id: "inpt-email",
             pos: { row: 0, col: 0 },
+            placeholder: "vasya@mail.ru",
           },
           element2: {
             id: "inpt-fio",
             pos: { row: 1, col: 0 },
+            placeholder: "Дуров Николас Стивович",
           },
           element3: {
             id: "inpt-phone",
             pos: { row: 2, col: 0 },
+            placeholder: "+7(913)666-01-12",
           },
           element4: {
             id: "combBox-type",
             pos: { row: 0, col: 1 },
+            urlRequestValues: "https://",
           },
           element5: {
             id: "combBox-vendor",
             pos: { row: 2, col: 1 },
+            urlRequestValues: "https://",
           },
           element6: {
             id: "combBox-model",
             pos: { row: 3, col: 1 },
+            urlRequestValues: "https://",
           },
           element7: {
             id: "inpt-serial",
