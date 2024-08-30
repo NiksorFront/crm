@@ -21,19 +21,20 @@ import {
 } from "@/components/ui/popover"
 
 type typeComboboxDemo = {
+  id?: string,
   className?: string, 
   placeholder?: string, 
   disabled?: boolean,
   rows?: Array<Record<string, string>>
 }
 
-function ComboboxDemo({className, placeholder, disabled, rows}: typeComboboxDemo) {
+function ComboboxDemo({id, className, placeholder, disabled, rows}: typeComboboxDemo) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild disabled={disabled}>
+      <PopoverTrigger id={id} asChild disabled={disabled}>
         <Button
           variant="outline"
           role="combobox"
@@ -93,8 +94,8 @@ type typeCombBox = {
 export default function CombBox({className, title, placeholder = "-", disabled, rowsToChoose, id, urlToGetRows, style}: typeCombBox){
     const rows = rowsToChoose && rowsToChoose?.map(row => {return {value: row, label: row}});
     //Сделать функционал для  urlToGetRows
-    return <div id={id} className="flex flex-col gap-2" style={style}>
+    return <div className="flex flex-col gap-2" style={style}>
         <Label htmlFor="email">{title}</Label>
-        <ComboboxDemo className={`w-full ${className}`} placeholder={placeholder} disabled={disabled} rows={rows}/>
+        <ComboboxDemo id={id} className={`w-full ${className}`} placeholder={placeholder} disabled={disabled} rows={rows}/>
       </div>
 }

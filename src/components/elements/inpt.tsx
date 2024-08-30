@@ -22,10 +22,10 @@ export default function Inpt({
 }: typeInpt) {
     console.log(style);
   return (
-    <div id={id} className="flex flex-col gap-2" style={style}>
-      <Label htmlFor={`${id}_input`}>{title}</Label>
+    <div className="flex flex-col gap-2" style={style}>
+      <Label htmlFor={`${id}`}>{title}</Label>
       <Input
-        id={`${id}_input`}
+        id={`${id}`}
         className={className}
         placeholder={placeholder}
         disabled={disabled}

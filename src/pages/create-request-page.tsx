@@ -7,7 +7,7 @@ import CombBox from "@/components/elements/combBox";
 import BtnSubmit from "@/components/elements/btnSubmit";
 import BtnPdf from "@/components/elements/btnPdf";
 
-function Element({element}: {element: ElementType}){
+function Element({element, tabName}: {element: ElementType, tabName: string}){
   const [typeElem, id] = element.id.split("-")
 
   const elementPosition = {gridRow: `${element.pos.row}`, gridColumn: `${element.pos.col}`};
@@ -18,25 +18,24 @@ function Element({element}: {element: ElementType}){
     case "inptBig":
       return <InptBig title={element.title} id={id} placeholder={element.placeholder} disabled={element.disabled} style={elementPosition}/>
     case "combBox": 
-      return <CombBox title={element.title} placeholder={element.placeholder} urlToGetRows={element.urlRequestValues} disabled={element.disabled} style={elementPosition}/>
+      return <CombBox title={element.title} id={id} placeholder={element.placeholder} urlToGetRows={element.urlRequestValues} disabled={element.disabled} style={elementPosition}/>
     case "btnSubmit":
-      return <BtnSubmit variant={"secondary"} style={elementPosition}>{element.title}</BtnSubmit>
+      return <BtnSubmit variant={"secondary"} id={id} style={elementPosition} acceptedValues={element.acceptedValues} submitUrl={element.submitUrl} tabWithInfo={tabName}>{element.title}</BtnSubmit>
     case "btnPdf":
-      return <BtnPdf variant={"outline"} pdfGenerateCode={() => console.log("скачено")} disabled={element.disabled} style={elementPosition}>{element.title}</BtnPdf>
+      return <BtnPdf variant={"outline"} id={id} pdfGenerateCode={() => console.log("скачено")} disabled={element.disabled} style={elementPosition}>{element.title}</BtnPdf>
   }
   //По этим typeElem и id надо найти элементы в базе элементов
   return <p key={id}>{`${typeElem} ${id}`}</p>
 }
 
 
-function TabContent({tab}: {tab: TabType}){
-  return tab.elements && Object.keys(tab.elements).map(element => <Element element={tab.elements[element]}/> )
+function TabContent({tab, tabName}: {tab: TabType, tabName:string}){
+  //@ts-ignore
+  return tab.elements && Object.keys(tab.elements).map(element => <Element element={tab.elements[element]} tabName={tabName}/> )
 }
 
 export default function CreateRequestPage() {
   const { settings } = useStore();
-
-  console.log(settings.tabs);
 
   return (
     <div className="flex flex-wrap"> 
@@ -65,9 +64,9 @@ export default function CreateRequestPage() {
               widthColumn.length === 1 ? widthColumn += "0" : widthColumn = widthColumn.substring(0, 2);
 
               console.log(widthColumn, 1 % Number(tabInfo.columns));
-              return <div className={`grid  gap-4`} 
+              return <div id={`${tab}`} className={`grid  gap-4`} 
                           style={{gridTemplateColumns: `repeat(${tabInfo.columns}, minmax(0, ${widthColumn}%)`,}} >
-                      <TabContent tab={tabInfo}/>
+                      <TabContent tab={tabInfo} tabName={`${tab}`}/>
                     </div>}
             )
           }

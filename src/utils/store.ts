@@ -125,7 +125,8 @@ export const useStore = create<storeType>((set) => ({
               "inptBig-comment",
             ],
             title: "Отправить форму",
-            submitUrl: "https://chet-tam.com",
+            submitUrl: "https://service-v.com/crm/tickets/ajax/post?action=createTicket",
+
           },
         },
       },

@@ -37,6 +37,17 @@ async function sendingInfo(endpoint: string, infoObject: object) {
     : res.json().then((err) => Promise.reject(err));
 }
 
+async function sendingInfoFromButton(url: string, data: object) {
+  const res = await fetch(url, {
+    method: "POST",
+    // mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    data: data,
+  });
+
+  return await getResponse(res);
+}
+
 async function deleteId(endpoint: string, id: string | number) {
   const res = await fetch(PATH + endpoint, {
     method: "DELETE",
@@ -46,4 +57,4 @@ async function deleteId(endpoint: string, id: string | number) {
   return await getResponse(res);
 }
 
-export { gettingData, sendingInfo, deleteId };
+export { gettingData, sendingInfo, deleteId, sendingInfoFromButton };

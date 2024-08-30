@@ -19,9 +19,10 @@ export default function InptBig({
     id,
   }: typeInpt) {
     return (
-      <div id={id} className="flex flex-col gap-2 max-h-96" style={style}>
-        <Label htmlFor="email">{title}</Label>
+      <div className="flex flex-col gap-2 max-h-96" style={style}>
+        <Label htmlFor={`${id}`}>{title}</Label>
         <Textarea
+          id={id}
           className={className}
           placeholder={placeholder}
           disabled={disabled}
