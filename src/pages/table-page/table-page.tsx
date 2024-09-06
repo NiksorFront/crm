@@ -44,7 +44,7 @@ export default function TablePage({title, endpoint, exceptions=[], endpointForAd
       <div className="py-4 flex justify-between">
         <h1 className="text-2xl text-left m-0">{title}</h1>
         {endpointForAdd !== "" && <Modal title="Добавление" type="add" endpointForSubmit={endpointForAdd}>
-                                          <Button variant="secondary" className="gap-2"><Plus/>Добавить</Button>
+                                            <Plus size={16}/>Добавить
                                   </Modal> }
         {/* <Button variant="secondary" className="gap-2"><Plus/>Добавить</Button> */}
       </div>

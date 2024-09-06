@@ -4,9 +4,6 @@ const PATH = "https://service-v.com/";
 
 function getResponse(res) {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
-  // return res.ok ? res.json() : res;
-  // ? res.json()
-  // : res.json().then((err) => Promise.reject(err));
 }
 
 async function gettingData(endpoint: string) {
@@ -20,17 +17,21 @@ async function gettingData(endpoint: string) {
   return await getResponse(res);
 }
 
+//Сейчас она используется для создания нового типа
 async function sendingInfo(endpoint: string, infoObject: object) {
   console.log(infoObject);
-  const res = await fetch("https://service-v.com/crm/devices/ajax/post", {
-    method: "POST",
-    // mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    data: JSON.stringify({
-      action: "insertDeviceType",
-      display_name: "valueassa",
-    }),
-  });
+  const res = await fetch(
+    "https://branch1.service-v.com/crm/devices/ajax/post",
+    {
+      method: "POST",
+      //mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify({
+        action: "insertDeviceType",
+        display_name: "valueassa",
+      }),
+    },
+  );
 
   return (await res.ok)
     ? res.json()

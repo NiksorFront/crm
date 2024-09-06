@@ -69,15 +69,15 @@ function ButtonGroup({rowInfo}: btnGroupType){
       {rowInfo.original.actionBtns.map((item, i) => (
         <Fragment key={i}>
           {item.edit && <Modal title="Редактирование данных" type="edit" endpointForSubmit={item.edit} id={rowInfo.original.id}> 
-                          <Button variant={"secondary"}><Pencil size={16}/></Button>
+                          <Pencil size={16}/>
                         </Modal>
           }
           {item.resetPassword && <Modal title="Смена пароля" type="resetPassword" endpointForSubmit={item.resetPassword}id={rowInfo.original.id}>
-                                    <Button variant={"secondary"}><KeyRound size={16}/></Button>
+                                    <KeyRound size={16}/>
                                  </Modal>
           }
           {item.delete && <Modal title="Удаление" type="delete" endpointForSubmit={item.delete} id={rowInfo.original.id}>
-                            <Button variant={"secondary"}><Trash2 size={16}/></Button>
+                            <Trash2 size={16}/>
                           </Modal>
           }
         </Fragment>
