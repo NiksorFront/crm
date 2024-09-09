@@ -44,22 +44,23 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
 
 function TabContent({tab, tabName}: {tab: TabType, tabName:string}){
   //@ts-ignore
-  return tab.elements && Object.keys(tab.elements).map(element => <Element key={element.id} element={tab.elements[element]} tabName={tabName}/> )
+  return tab.elements && Object.keys(tab.elements).map((element, ind) => <Element key={`${element.id}${ind}`} element={tab.elements[element]} tabName={tabName}/> )
 }
 
 export default function CreateRequestPage() {
   const { settings, newActiveTab } = useStore();
   const [errorText, setErrorText] = useState("");
 
-  const switchTab = e => {
-    const id = e.target.id.split("#")[1];
+  const switchTab = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLElement; // Приводим e.target к HTMLElement
+    const id = target.id.split("#")[1];
     if(id){
       console.log("Переключение кайф")
       newActiveTab(id);
     }
     else{
-      const currentText = e.target.textContent;
-      e.target.textContent = "Ошибка";
+      const currentText = target.textContent;
+      target.textContent = "Ошибка";
       //Сделать тест красным надо будет
       // setTimeout(() =>{
       //   e.target.textContent = currentText;
@@ -75,8 +76,8 @@ export default function CreateRequestPage() {
           <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500">
             {settings.tabs && Object.keys(settings.tabs).map(tab => 
               <li className="mr-2" key={tab}>
-                <Button id={`#${tab}`} disabled={settings.tabs[tab].dsbldTab} variant="secondary" onClick={switchTab} className={`border-solid border-y-2 border-gray-300 ${settings.tabs[tab].activeTab && "bg-green-100"} hover:text-gray-600 hover:border-gray-600`}>
-                  {errorText ? errorText : settings.tabs[tab].title}
+                <Button id={`#${tab}`} disabled={settings.tabs![tab].dsbldTab} variant="secondary" onClick={switchTab} className={`border-solid border-y-2 border-gray-300 ${settings.tabs![tab].activeTab && "bg-green-100"} hover:text-gray-600 hover:border-gray-600`}>
+                  {errorText ? errorText : settings.tabs![tab].title}
                 </Button>
               </li>)}
           </ul>

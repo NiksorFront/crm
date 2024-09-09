@@ -105,7 +105,7 @@ type typeCombBox = {
   id?: string;
   valuesOrURLRequestValues?: Array<string> | string;
   style?: {};
-  dependsOn: string | boolean;
+  dependsOn?: string | boolean;
   // tabWithInfo: string;
 };
 

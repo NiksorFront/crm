@@ -15,9 +15,10 @@ type typeBtnSubmit = {
     submitUrl: string;
     acceptedValues?: Array<string>;
     tabWithInfo: string;
+    error?: string;
   };
 
-export default function BtnSubmit({className, children, disabled, variant, id, style, submitUrl, acceptedValues=[], tabWithInfo}: typeBtnSubmit){
+export default function BtnSubmit({className, children, disabled, variant, id, style, submitUrl, acceptedValues=[], tabWithInfo, error="К кнопке не привязан ни один элемент для отправки"}: typeBtnSubmit){
     const [errorText, setErrorText] = useState("");
     const { settings, newTabinfo } = useStore();
 
@@ -68,7 +69,8 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
                                     });
 
         }else{
-            setErrorText("К кнопке не привязан ни один элемент для отправки");
+            //"К кнопке не привязан ни один элемент для отправки"
+            setErrorText(error);
             setTimeout(() => setErrorText(""), 5000);
         }
 
@@ -84,25 +86,3 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
 
  //Напиши код внутри submit, который будет перебирать все acceptedValues, каждый делать ключом со значением взятым из полей найденых в currentTab с таким же id, а потом добавлять это в data
  //Найди радительскую node с тегом tabWithInfo. И из каждого id, что совпадает с названием ключа 
-
- /*let nextTab = tabWithInfo; //храниться имя следующего ключа,
-            let switchNextTab = false; //Указываем нужно ли переключаться на следующий таб или нет.
-
-            Object.keys(settings.tabs).forEach((tab, index, tabsArray) => {
-                if (tab === tabWithInfo) {
-                    if (index < tabsArray.length - 1) {
-                        nextTab = tabsArray[index + 1];
-                        switchNextTab = true;
-                    } else {
-                        nextTab = tabWithInfo;
-                        switchNextTab = false;
-                    }
-                }
-            });
-
-            // Теперь в переменной `nextTab` будет храниться имя следующего ключа,
-            // а `switchNextTab` будет указывать, нужно ли переключаться на следующий таб или нет.
-
-
-            console.log('Next tab key:', nextTab);
-            console.log('Switch to next tab:', switchNextTab);*/

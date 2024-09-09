@@ -21,17 +21,18 @@ async function gettingData(endpoint: string) {
 async function sendingInfo(endpoint: string, infoObject: object) {
   console.log(infoObject);
   const res = await fetch(
-    "https://branch1.service-v.com/crm/devices/ajax/post",
+    "https://service-v.com/crm/devices/ajax/post", //?action=insertDeviceType
     {
       method: "POST",
-      //mode: "no-cors",
+      // mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       data: JSON.stringify({
         action: "insertDeviceType",
-        display_name: "valueassa",
+        display_name: "valueasssada",
       }),
     },
   );
+  console.log(res);
 
   return (await res.ok)
     ? res.json()

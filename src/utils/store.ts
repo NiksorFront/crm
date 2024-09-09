@@ -36,8 +36,17 @@ type SettingsType = {
 
 interface storeType {
   settings: SettingsType;
-  newTabinfo: (tabName: string, tabData: TabType) => void;
+  newTabContent: (tabName: string, tabData: TabType) => void;
   newActiveTab: (tabName: string) => void;
+  updateTitle: (newTitle: string) => void;
+  updateTabTitle: (tabName: string, newTitle: string) => void;
+  addNewTab: () => void;
+  removeTab: (tabName: string) => void;
+  updateElement: (
+    tabName: string,
+    elementId: string,
+    newValues: Record<string, ElementType>,
+  ) => void;
 }
 
 export const useStore = create<storeType>((set) => ({
@@ -260,7 +269,7 @@ export const useStore = create<storeType>((set) => ({
     },
   },
   // addTab: (title) => set(state => {})
-  newTabinfo: (tabName, tabData) =>
+  newTabContent: (tabName, tabData) =>
     set((state) => ({
       settings: {
         ...state.settings,
@@ -286,6 +295,88 @@ export const useStore = create<storeType>((set) => ({
       },
     }));
   },
+
+  //Функция для обновления главного заголовка
+  updateTitle: (newTitle) => {
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        title: newTitle, // Обновление заголовка
+      },
+    }));
+  },
+
+  //Функция для обновления заголовка таба
+  updateTabTitle: (tabName, newTitle) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        tabs: {
+          ...state.settings.tabs,
+          [tabName]: {
+            ...state.settings.tabs[tabName],
+            title: newTitle, // Обновляем title у выбранного таба
+          },
+        },
+      },
+    })),
+
+  // Функция для добавления новой вкладки
+  addNewTab: () => {
+    const newTabName = `tab${Date.now()}`; // Генерация уникального имени вкладки
+    const newTabData: TabType = {
+      title: "вкладка",
+      activeTab: false,
+      dsbldTab: false,
+      columns: 1,
+      elements: {}, // Добавляем пустые элементы, если потребуется можно добавить данные
+    };
+
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        tabs: {
+          ...state.settings.tabs,
+          [newTabName]: newTabData, // Добавляем новую вкладку
+        },
+      },
+    }));
+  },
+
+  // Функция для удаления вкладки
+  removeTab: (tabName: string) => {
+    set((state) => {
+      const updatedTabs = { ...state.settings.tabs };
+      delete updatedTabs[tabName]; // Удаляем вкладку по ключу tabName
+      return {
+        settings: {
+          ...state.settings,
+          tabs: updatedTabs, // Обновляем состояние вкладок
+        },
+      };
+    });
+  },
+
+  // Новая функция для изменения любого элемента
+  updateElement: (tabName, elementId, newValues) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        tabs: {
+          ...state.settings.tabs,
+          [tabName]: {
+            ...state.settings.tabs![tabName],
+            elements: {
+              ...state.settings.tabs![tabName].elements,
+              [elementId]: {
+                ...state.settings.tabs![tabName].elements![elementId],
+                ...newValues, // Обновляем только переданные значения
+              },
+            },
+          },
+        },
+      },
+    })),
 }));
 
 interface typeDepends {

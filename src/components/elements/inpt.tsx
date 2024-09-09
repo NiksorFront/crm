@@ -10,7 +10,7 @@ type typeInpt = {
   disabled?: boolean;
   type?: string;
   id?: string;
-  style: {};
+  style?: {};
   dependsOn?: string | boolean;
   value?: string | number;
   // tabWithInfo: string;
