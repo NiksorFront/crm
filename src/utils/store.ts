@@ -358,7 +358,20 @@ export const useStore = create<storeType>((set) => ({
   },
 
   // Новая функция для изменения любого элемента
-  updateElement: (tabName, elementId, newValues) =>
+  updateElement: (tabName, elementId, newValues) => {
+    const element = (state) => {
+      let itg = { elem: { pos: { row: 0, col: 0 }, id: "none-0" } };
+
+      const spisochek = state.settings.tabs![tabName].elements;
+      Object.keys(spisochek).forEach((element) => {
+        if (spisochek[element].id === elementId) {
+          itg = { [element]: { ...spisochek[element], ...newValues } };
+        }
+      });
+
+      return itg;
+    };
+
     set((state) => ({
       settings: {
         ...state.settings,
@@ -368,15 +381,13 @@ export const useStore = create<storeType>((set) => ({
             ...state.settings.tabs![tabName],
             elements: {
               ...state.settings.tabs![tabName].elements,
-              [elementId]: {
-                ...state.settings.tabs![tabName].elements![elementId],
-                ...newValues, // Обновляем только переданные значения
-              },
+              ...element(state),
             },
           },
         },
       },
-    })),
+    }));
+  },
 }));
 
 interface typeDepends {

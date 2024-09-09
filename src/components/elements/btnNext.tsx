@@ -14,7 +14,7 @@ type typeBtnNext = {
   };
 
 export default function BtnNext({className, children, disabled, variant, id, style, currentTab}: typeBtnNext){
-    const {settings, newTabinfo} = useStore();
+    const {settings, newTabContent} = useStore();
 
     let nextTab = currentTab; //храниться имя следующего ключа,
     let switchNextTab = false; //Указываем нужно ли переключаться на следующий таб или нет.
@@ -33,12 +33,12 @@ export default function BtnNext({className, children, disabled, variant, id, sty
     });
 
     const swchNxtTab = () => {
-        newTabinfo(currentTab, {...settings.tabs![currentTab],
+        newTabContent(currentTab, {...settings.tabs![currentTab],
                                 activeTab: false,
                                 dsbldTab: false,
         })
 
-        newTabinfo(nextTab, {...settings.tabs![nextTab],
+        newTabContent(nextTab, {...settings.tabs![nextTab],
             activeTab: true,
             dsbldTab: false,
         })
@@ -46,7 +46,7 @@ export default function BtnNext({className, children, disabled, variant, id, sty
         //Напиздеть про валидацию. и что тимур мне сделал нужный GET запрос.
     }
 
-    return <Button id={id} className={`${className}`} disabled={disabled || !switchNextTab} variant={variant} type="submit" style={style} onClick={swchNxtTab}>
+    return <Button id={id} className={`${className} w-full`} disabled={disabled || !switchNextTab} variant={variant} type="submit" style={style} onClick={swchNxtTab}>
             {children}
     </Button>
 }

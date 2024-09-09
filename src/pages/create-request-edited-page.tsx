@@ -2,17 +2,12 @@ import {useStore} from "../utils/store";
 import {useState} from "react";
 import {Button} from "../components/ui/button";
 import { TabType } from "../utils/store";
-import {Element} from "./create-request-page";
+import TabContentWithDragble from "../components/tab-content-for-edited-page";
 import ElementsLibraryDrawer from "../components/elements-library-drawer";
 import { X } from "lucide-react"; // Импорт иконки крестика
 
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
-function TabContent({tab, tabName}: {tab: TabType, tabName:string}){
-    //@ts-ignore
-    return tab.elements && Object.keys(tab.elements).map((element, ind) => <Element key={`${element.id}${ind}`} element={tab.elements[element]} tabName={tabName}/> )
-}
 
 export default function CreateRequestEditedPage(){
     const { settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, newTabContent, updateElement } = useStore();
@@ -109,7 +104,6 @@ export default function CreateRequestEditedPage(){
                             <Button
                                 id="new_tab"
                                 variant="secondary"
-                                onClick={switchTab}
                                 className={`border-solid border-y-2 border-gray-300 hover:text-gray-600 hover:border-gray-600`}
                                 onClick={() => addNewTab()}
                             >
@@ -130,8 +124,8 @@ export default function CreateRequestEditedPage(){
 
                         return <div key={`${tab}`} id={`${tab}`} className={`grid gap-4 ${tabInfo.activeTab ? "" : "hidden"}`} 
                                     style={{gridTemplateColumns: `repeat(${tabInfo.columns}, minmax(0, ${widthColumn}%)`}} >
-                                <TabContent tab={tabInfo} tabName={`${tab}`}/>
-                                </div>}
+                                <TabContentWithDragble tab={tabInfo} tabName={`${tab}`}/>
+                            </div>}
                         )
                     }
                 </div>

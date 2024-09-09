@@ -20,7 +20,7 @@ type typeBtnSubmit = {
 
 export default function BtnSubmit({className, children, disabled, variant, id, style, submitUrl, acceptedValues=[], tabWithInfo, error="К кнопке не привязан ни один элемент для отправки"}: typeBtnSubmit){
     const [errorText, setErrorText] = useState("");
-    const { settings, newTabinfo } = useStore();
+    const { settings, newTabContent } = useStore();
 
     const submit = () => {
         const currentTab = document.getElementById(`${tabWithInfo}`);
@@ -62,7 +62,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
                 }
             })
             //Записываем это в настройках(в будущем отправляем на сервер)
-            newTabinfo(tabWithInfo, {...settings.tabs![tabWithInfo],
+            newTabContent(tabWithInfo, {...settings.tabs![tabWithInfo],
                                     activeTab: true,
                                     dsbldTab: false,
                                     elements: newElements
@@ -78,7 +78,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
     }
 
     return <>
-        <Button id={id} className={`${className} ${errorText && "text-red-400"}`} disabled={disabled} variant={variant} type="submit" style={style} onClick={submit}>
+        <Button id={id} className={`${className} ${errorText && "text-red-400"} w-full`} disabled={disabled} variant={variant} type="submit" style={style} onClick={submit}>
             {errorText ? errorText : children}
         </Button>
     </>
