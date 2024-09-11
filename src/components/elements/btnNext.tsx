@@ -46,7 +46,7 @@ export default function BtnNext({className, children, disabled, variant, id, sty
         //Напиздеть про валидацию. и что тимур мне сделал нужный GET запрос.
     }
 
-    return <Button id={id} className={`${className} w-full`} disabled={disabled || !switchNextTab} variant={variant} type="submit" style={style} onClick={swchNxtTab}>
+    return <Button id={id} className={`w-full ${className}`} disabled={disabled || !switchNextTab} variant={variant} type="submit" style={style} onClick={swchNxtTab}>
             {children}
     </Button>
 }

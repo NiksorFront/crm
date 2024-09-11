@@ -78,7 +78,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
     }
 
     return <>
-        <Button id={id} className={`${className} ${errorText && "text-red-400"} w-full`} disabled={disabled} variant={variant} type="submit" style={style} onClick={submit}>
+        <Button id={id} className={`w-full ${className} ${errorText && "text-red-400"}`} disabled={disabled} variant={variant} type="submit" style={style} onClick={submit}>
             {errorText ? errorText : children}
         </Button>
     </>

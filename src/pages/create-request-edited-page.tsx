@@ -2,7 +2,7 @@ import {useStore} from "../utils/store";
 import {useState} from "react";
 import {Button} from "../components/ui/button";
 import { TabType } from "../utils/store";
-import TabContentWithDragble from "../components/tab-content-for-edited-page";
+import TabContentWithDragble from "./tab-content-for-edited-page";
 import ElementsLibraryDrawer from "../components/elements-library-drawer";
 import { X } from "lucide-react"; // Импорт иконки крестика
 
@@ -10,9 +10,12 @@ import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 export default function CreateRequestEditedPage(){
-    const { settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, newTabContent, updateElement } = useStore();
+    const { settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, updateTabColumns, updateElement } = useStore();
     const [isEditingTitle, setIsEditingTitle] = useState(false); // состояние для режима редактирования заголовка
     const [tempTitle, setTempTitle] = useState(settings.title); // временное значение заголовка
+
+    const [customMaxRows, setCustomMaxRows] = useState<{ [key: string]: number }>({}); // Хранит maxRow для каждого таба
+
   
     // Состояние для отслеживания редактируемого таба и его заголовка
     const [editingTab, setEditingTab] = useState<string | null>(null);
@@ -41,11 +44,25 @@ export default function CreateRequestEditedPage(){
         removeTab(tabName);
       };
 
+
+    // Функция для изменения количества столбцов
+    const changeColumns = (tabName: string, delta: number) => {
+        const currentColumns = settings.tabs![tabName].columns;
+        const newColumns = Math.max(1, currentColumns! + delta); // Не допускаем значения меньше 1
+        updateTabColumns(tabName, newColumns);
+    };
+
+    // Функция для изменения количества строк
+    const changeMaxRows = (tabName: string, delta: number) => {
+        setCustomMaxRows(prev => {
+            const currentMaxRow = prev[tabName] || 0;
+            const newMaxRow = Math.max(0, currentMaxRow + delta); // Не допускаем значения меньше 0
+            return { ...prev, [tabName]: newMaxRow };
+        });
+    };
+
     return(<>
         <h1 className="text-2xl font-semibold mx-10 my-4">{"Настройки меню создания заявок"}</h1>
-        <ElementsLibraryDrawer>
-            Библиотека элементов
-        </ElementsLibraryDrawer>
         <DndProvider backend={HTML5Backend}>
             <div className="flex flex-wrap"> 
                 {/* Проверка на режим редактирования */}
@@ -116,17 +133,50 @@ export default function CreateRequestEditedPage(){
                 <div className="p-4 my-2 mx-10 w-full bg-white rounded-lg shadow ">
                     { 
                         settings.tabs && Object.keys(settings.tabs).map(tab => {
-                        //@ts-ignore
-                        const tabInfo: TabType = settings.tabs[tab];
+
+                        const tabInfo: TabType = settings.tabs![tab];
 
                         let widthColumn = `${1 / Number(tabInfo.columns)}`.substring(2); //Высчитваем столько процентов ширины нам надо
                         widthColumn.length === 1 ? widthColumn += "0" : widthColumn = widthColumn.substring(0, 2);
 
-                        return <div key={`${tab}`} id={`${tab}`} className={`grid gap-4 ${tabInfo.activeTab ? "" : "hidden"}`} 
-                                    style={{gridTemplateColumns: `repeat(${tabInfo.columns}, minmax(0, ${widthColumn}%)`}} >
-                                <TabContentWithDragble tab={tabInfo} tabName={`${tab}`}/>
-                            </div>}
-                        )
+                        // Находим максимальное значение строки (pos.row) среди элементов
+                        const maxRow = tabInfo.elements
+                                       ? Math.max(...Object.keys(tabInfo.elements).map(key => parseInt(tabInfo.elements[key].pos.row) || 0))
+                                       : 0;
+                        //И записываем его, если оно ещё не сохранено
+                        if(customMaxRows[tab] === undefined){
+                            changeMaxRows(tab, maxRow)
+                        }
+
+
+                        return <>
+                                <ElementsLibraryDrawer className={`${tabInfo.activeTab ? "" : "hidden"}`} tabName={`${tab}`} rws={customMaxRows[tab]} clms={tabInfo.columns ? tabInfo.columns : 1}>
+                                    Библиотека элементов
+                                </ElementsLibraryDrawer>
+                                {/* Отображение информации о количестве столбцов и строк с кнопками */}
+                                <div className={`col-span-full text-gray-600 font-medium flex pb-4 items-center gap-4 ${tabInfo.activeTab ? "" : "hidden"}`}>
+                                    {/* Количество столбцов */}
+                                    <div className="flex items-center gap-2">
+                                        <p>Cтолбцов: </p>
+                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeColumns(tab, -1)}>-</Button>
+                                        <span>{`${tabInfo.columns}`}</span>
+                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeColumns(tab, 1)}>+</Button>
+                                    </div>
+                                    {/* Число строк */}
+                                    <div className="flex items-center gap-2">
+                                        <p>Cтрок: </p>
+                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeMaxRows(tab, -1)}>-</Button>
+                                        <span>{`${customMaxRows[tab]}`}</span>
+                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeMaxRows(tab, 1)}>+</Button>
+                                    </div>
+                                </div>
+                                
+                                {/* Содержимое таба */}
+                                <div key={`${tab}`} id={`${tab}`} className={`grid gap-4 ${tabInfo.activeTab ? "" : "hidden"}`} 
+                                            style={{gridTemplateColumns: `repeat(${tabInfo.columns}, minmax(0, ${widthColumn}%)`, gridTemplateRows: `repeat(${customMaxRows[tab]}, auto)`}} >
+                                        <TabContentWithDragble tab={tabInfo} tabName={`${tab}`} rows={customMaxRows[tab]} colums={tabInfo.columns ? tabInfo.columns : 1}/>
+                                </div>
+                            </>})
                     }
                 </div>
             </div>

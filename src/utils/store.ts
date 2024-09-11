@@ -36,16 +36,21 @@ type SettingsType = {
 
 interface storeType {
   settings: SettingsType;
-  newTabContent: (tabName: string, tabData: TabType) => void;
   newActiveTab: (tabName: string) => void;
   updateTitle: (newTitle: string) => void;
   updateTabTitle: (tabName: string, newTitle: string) => void;
+  updateTabColumns: (tabName: string, newColumns: number) => void;
   addNewTab: () => void;
   removeTab: (tabName: string) => void;
   updateElement: (
     tabName: string,
     elementId: string,
-    newValues: Record<string, ElementType>,
+    newValues: Record<string, {}>,
+  ) => void;
+  newElement: (
+    tabName: string,
+    elementName: string,
+    elementData: ElementType,
   ) => void;
 }
 
@@ -268,17 +273,7 @@ export const useStore = create<storeType>((set) => ({
       },
     },
   },
-  // addTab: (title) => set(state => {})
-  newTabContent: (tabName, tabData) =>
-    set((state) => ({
-      settings: {
-        ...state.settings,
-        tabs: {
-          ...state.settings.tabs,
-          [tabName]: tabData, // Добавляем новый ключ с именем tabName и значением tabData
-        },
-      },
-    })),
+
   newActiveTab: (tabName) => {
     set((state) => ({
       settings: {
@@ -316,6 +311,21 @@ export const useStore = create<storeType>((set) => ({
           [tabName]: {
             ...state.settings.tabs[tabName],
             title: newTitle, // Обновляем title у выбранного таба
+          },
+        },
+      },
+    })),
+
+  //функция для обновления columns
+  updateTabColumns: (tabName, newColumns) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        tabs: {
+          ...state.settings.tabs,
+          [tabName]: {
+            ...state.settings.tabs![tabName],
+            columns: newColumns, // Обновляем значение columns для указанного таба
           },
         },
       },
@@ -382,6 +392,25 @@ export const useStore = create<storeType>((set) => ({
             elements: {
               ...state.settings.tabs![tabName].elements,
               ...element(state),
+            },
+          },
+        },
+      },
+    }));
+  },
+
+  // Функция для добавления нового элемента
+  newElement: (tabName, elementName, elementData) => {
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        tabs: {
+          ...state.settings.tabs,
+          [tabName]: {
+            ...state.settings.tabs![tabName],
+            elements: {
+              ...state.settings.tabs![tabName].elements,
+              [elementName]: elementData, // Добавляем новый элемент
             },
           },
         },
