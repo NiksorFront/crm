@@ -6,9 +6,10 @@ type typeDragble = {
     element: ElementType, 
     tabName: string, 
     onMoveElement: (draggedElementId: string, targetElementId: string) => void
+    showBindings: boolean,
 }
 
-function DragbleElement({element, tabName, onMoveElement}: typeDragble){
+function DragbleElement({element, tabName, onMoveElement, showBindings}: typeDragble){
     const {updateElement} = useStore();
 
     const [{isDragging}, refDrag] = useDrag({
@@ -35,7 +36,7 @@ function DragbleElement({element, tabName, onMoveElement}: typeDragble){
                 gridRow: element.pos.row
             }}
         >
-            <EditedElemnet element={element} tabName={tabName}/>
+            <EditedElemnet element={element} tabName={tabName} showBindings={showBindings}/>
         </div>
     );
 }
@@ -77,7 +78,7 @@ function EmptyGridCell({pos, onMoveElement}: typeEmptyGridCell){
     );
 }
 
-export default function TabContentWithDragble({tab, tabName, rows, colums}: {tab: TabType, tabName: string, rows: number, colums: number}) {
+export default function TabContentWithDragble({tab, tabName, rows, colums, showBindings}: {tab: TabType, tabName: string, rows: number, colums: number, showBindings: boolean}) {
     const {updateElementPos} = useStore();
     
     // Функция для перемещения двух элементов местами
@@ -101,13 +102,6 @@ export default function TabContentWithDragble({tab, tabName, rows, colums}: {tab
 
     //Функция для перемещения элемента в пустую клетку
     const moveElement = (draggedElementId: string, pos: {row: number, col: number}) =>{
-        let draggedElement: ElementType = {id: "1", pos: {row: 0, col: 0}};
-        Object.keys(tab.elements!).forEach(element_name => {
-            if (tab.elements![element_name].id === draggedElementId) {
-                draggedElement = tab.elements![element_name];
-            }
-        });
-
         updateElementPos(tabName, draggedElementId, { pos: pos });
         // console.log(draggedElementId, pos)
     }
@@ -146,6 +140,7 @@ export default function TabContentWithDragble({tab, tabName, rows, colums}: {tab
                     element={tab.elements![element]}
                     tabName={tabName}
                     onMoveElement={changeElement}
+                    showBindings={showBindings}
                 />
             ))}
             {gridCells}

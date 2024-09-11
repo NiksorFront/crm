@@ -1,6 +1,7 @@
 import {useStore} from "../../utils/store";
 import {useState} from "react";
 import {Button} from "../../components/ui/button";
+import {Checkbox} from "../../components/ui/checkbox";
 import { TabType } from "../../utils/store";
 import TabContentWithDragble from "./tab-content-with-dragble";
 import ElementsLibraryDrawer from "../../components/elements-library-drawer";
@@ -15,6 +16,7 @@ export default function CreateRequestEditedPage(){
     const [tempTitle, setTempTitle] = useState(settings.title); // временное значение заголовка
 
     const [customMaxRows, setCustomMaxRows] = useState<{ [key: string]: number }>({}); // Хранит maxRow для каждого таба
+    const [showBindings, setShowBindings] = useState<boolean>(false); // состояние для чекбокса "просмотр привязок"
 
   
     // Состояние для отслеживания редактируемого таба и его заголовка
@@ -157,27 +159,39 @@ export default function CreateRequestEditedPage(){
                                     Библиотека элементов
                                 </ElementsLibraryDrawer>
                                 {/* Отображение информации о количестве столбцов и строк с кнопками */}
-                                <div className={`col-span-full text-gray-600 font-medium flex pb-4 items-center gap-4 ${tabInfo.activeTab ? "" : "hidden"}`}>
-                                    {/* Количество столбцов */}
-                                    <div className="flex items-center gap-2">
-                                        <p>Cтолбцов: </p>
-                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeColumns(tab, -1)}>-</Button>
-                                        <span>{`${tabInfo.columns}`}</span>
-                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeColumns(tab, 1)}>+</Button>
+                                <div className={`col-span-full text-gray-600 font-medium flex justify-between pb-4 items-center gap-4 ${tabInfo.activeTab ? "" : "hidden"}`}>
+                                    <div className="flex items-center gap-6">
+                                        {/* Количество столбцов */}
+                                        <div className="flex items-center gap-2">
+                                            <p>Cтолбцов: </p>
+                                            <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeColumns(tab, -1)}>-</Button>
+                                            <span>{`${tabInfo.columns}`}</span>
+                                            <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeColumns(tab, 1)}>+</Button>
+                                        </div>
+                                        {/* Число строк */}
+                                        <div className="flex items-center gap-2">
+                                            <p>Cтрок: </p>
+                                            <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeMaxRows(tab, -1)}>-</Button>
+                                            <span>{`${customMaxRows[tab]}`}</span>
+                                            <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeMaxRows(tab, 1)}>+</Button>
+                                        </div>
                                     </div>
-                                    {/* Число строк */}
-                                    <div className="flex items-center gap-2">
-                                        <p>Cтрок: </p>
-                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeMaxRows(tab, -1)}>-</Button>
-                                        <span>{`${customMaxRows[tab]}`}</span>
-                                        <Button className="p-1 h-4" variant={"ghost"} onClick={() => changeMaxRows(tab, 1)}>+</Button>
+
+                                   {/* Чекбокс для просмотра привязок */}
+                                   <div className="flex items-center gap-2">
+                                        <Checkbox
+                                            id={`showBindingsCheckbox-${tab}`}
+                                            checked={showBindings}
+                                            onCheckedChange={() => setShowBindings(prev => !prev)} // Переключение состояния чекбокса
+                                        />
+                                        <label htmlFor={`showBindingsCheckbox-${tab}`}>Просмотр привязок</label>
                                     </div>
                                 </div>
                                 
                                 {/* Содержимое таба */}
                                 <div key={`${tab}`} id={`${tab}`} className={`grid gap-4 ${tabInfo.activeTab ? "" : "hidden"}`} 
                                             style={{gridTemplateColumns: `repeat(${tabInfo.columns}, minmax(0, ${widthColumn}%)`, gridTemplateRows: `repeat(${customMaxRows[tab]}, auto)`}} >
-                                        <TabContentWithDragble tab={tabInfo} tabName={`${tab}`} rows={customMaxRows[tab]} colums={tabInfo.columns ? tabInfo.columns : 1}/>
+                                        <TabContentWithDragble tab={tabInfo} tabName={`${tab}`} rows={customMaxRows[tab]} colums={tabInfo.columns ? tabInfo.columns : 1} showBindings={showBindings}/>
                                 </div>
                             </>})
                     }
