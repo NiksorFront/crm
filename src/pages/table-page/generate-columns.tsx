@@ -60,7 +60,8 @@ function sortColumnsByPriority(columns: columnType) {
   });
 }
 
-type btnGroupType = {rowInfo: {original: {actionBtns:[{edit: string, resetPassword: string, delete: string}], id?: number | string}}};
+type forType = {endpoint: string, action: string};
+type btnGroupType = {rowInfo: {original: {actionBtns:[{edit: forType, resetPassword: forType, delete: forType}], id?: number | string}}};
 function ButtonGroup({rowInfo}: btnGroupType){
     // console.log(rowInfo);
 
@@ -68,15 +69,15 @@ function ButtonGroup({rowInfo}: btnGroupType){
     <div className="flex gap-2"> 
       {rowInfo.original.actionBtns.map((item, i) => (
         <Fragment key={i}>
-          {item.edit && <Modal title="Редактирование данных" type="edit" endpointForSubmit={item.edit} id={rowInfo.original.id}> 
+          {item.edit && <Modal title="Редактирование данных" type="edit" forSubmit={item.edit} id={rowInfo.original.id}> 
                           <Pencil size={16}/>
                         </Modal>
           }
-          {item.resetPassword && <Modal title="Смена пароля" type="resetPassword" endpointForSubmit={item.resetPassword}id={rowInfo.original.id}>
+          {item.resetPassword && <Modal title="Смена пароля" type="resetPassword" forSubmit={item.resetPassword}id={rowInfo.original.id}>
                                     <KeyRound size={16}/>
                                  </Modal>
           }
-          {item.delete && <Modal title="Удаление" type="delete" endpointForSubmit={item.delete} id={rowInfo.original.id}>
+          {item.delete && <Modal title="Удаление" type="delete" forSubmit={item.delete} id={rowInfo.original.id}>
                             <Trash2 size={16}/>
                           </Modal>
           }

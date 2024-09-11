@@ -42,10 +42,15 @@ interface storeType {
   updateTabColumns: (tabName: string, newColumns: number) => void;
   addNewTab: () => void;
   removeTab: (tabName: string) => void;
-  updateElement: (
+  updateElementPos: (
     tabName: string,
     elementId: string,
     newValues: Record<string, {}>,
+  ) => void;
+  updateElement: (
+    tabName: string,
+    elementId: string,
+    newValues: Partial<ElementType>,
   ) => void;
   newElement: (
     tabName: string,
@@ -368,7 +373,7 @@ export const useStore = create<storeType>((set) => ({
   },
 
   // Новая функция для изменения любого элемента
-  updateElement: (tabName, elementId, newValues) => {
+  updateElementPos: (tabName, elementId, newValues) => {
     const element = (state) => {
       let itg = { elem: { pos: { row: 0, col: 0 }, id: "none-0" } };
 
@@ -397,6 +402,39 @@ export const useStore = create<storeType>((set) => ({
         },
       },
     }));
+  },
+
+  // Обновление элемента значений элемента
+  updateElement: (tabName, elementId, newValues) => {
+    set((state) => {
+      const tab = state.settings.tabs?.[tabName];
+      if (!tab || !tab.elements) {
+        console.error(`Tab ${tabName} или его элементы не найдены`);
+        return state;
+      }
+
+      const updatedElements = Object.fromEntries(
+        Object.entries(tab.elements).map(([key, element]) => {
+          if (element.id === elementId) {
+            return [key, { ...element, ...newValues }];
+          }
+          return [key, element];
+        }),
+      );
+
+      return {
+        settings: {
+          ...state.settings,
+          tabs: {
+            ...state.settings.tabs,
+            [tabName]: {
+              ...tab,
+              elements: updatedElements,
+            },
+          },
+        },
+      };
+    });
   },
 
   // Функция для добавления нового элемента

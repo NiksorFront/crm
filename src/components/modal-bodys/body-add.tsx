@@ -6,11 +6,11 @@ import { sendingInfo } from "../../utils/api";
 
 type BodyAddType = {
     className?: string;
-    endpointForSubmit: string;
+    forSubmit: {endpoint: string, action: string};
     onClose: () => void;  // Assuming you have a function to close the modal
 };
 
-export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyAddType) {
+export default function BodyAdd({ className, forSubmit, onClose }: BodyAddType) {
     const refBtn = useRef(null);
     const ref = useRef(null);
     const ref2 = useRef(null);
@@ -24,10 +24,11 @@ export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyA
         setErrorMessage("");
         try {
             //@ts-ignore
-            await sendingInfo(endpointForSubmit, { display_name: "ref.current.value" });
+            await sendingInfo(forSubmit.endpoint, {action: forSubmit.action, display_name: ref.current.value });
             setSubmitSuccess(true);
-            setTimeout(() => onClose(), 5000);
+            setTimeout(() => onClose(), 3000);
         } catch (error) {
+            console.log(error)
             setErrorMessage("Ошибка добавления!");
         } finally {
             setIsSubmitting(false);
@@ -39,11 +40,11 @@ export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyA
         setErrorMessage("");
         try {
             //@ts-ignore
-            await sendingInfo(endpointForSubmit, { name: ref.current.value, short_name: ref2.current.value });
+            await sendingInfo(forSubmit.endpoint, {action: forSubmit.action, name: ref.current.value, short_name: ref2.current.value });
             setSubmitSuccess(true);
-            setTimeout(() => onClose(), 5000);
+            setTimeout(() => onClose(), 3000);
         } catch (error) {
-            setErrorMessage("Ошибка добавления!");
+            setErrorMessage("Ошибка добавления! Возможно такой тип уже есть");
         } finally {
             setIsSubmitting(false);
         }
@@ -53,7 +54,7 @@ export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyA
         return <p className="text-green-600">Добавлено</p>;
     }
 
-    if (endpointForSubmit === "crm/devices/ajax/post?action=insertDeviceType") {
+    if (forSubmit.action === "insertDeviceType") {
         return (
             <div className={className}>
                 <Label htmlFor="deviceType">Новый тип устройства</Label>
@@ -77,7 +78,7 @@ export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyA
         );
     }
 
-    if (endpointForSubmit === "crm/devices/ajax/post?action=insertDeviceVendor") {
+    if (forSubmit.action === "insertDeviceVendor") {
         return (
             <div className={className}>
                 <Label htmlFor="fullName">Полное название</Label>
@@ -106,5 +107,5 @@ export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyA
         );
     }
 
-    return <p>{endpointForSubmit}</p>;
+    return <p>{forSubmit.action}</p>;
 }

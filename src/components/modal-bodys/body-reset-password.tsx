@@ -2,8 +2,14 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import {sendingInfo} from "../../utils/api";
 
-export default function BodyResetPassword({ className = "" }: { className?: string }) {
+type BodyResetPasswordType = {
+    className?: string, 
+    forReset: {endpoint: string, action: string}
+}
+
+export default function BodyResetPassword({ className="", forReset }: BodyResetPasswordType) {
     //const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,6 +36,21 @@ export default function BodyResetPassword({ className = "" }: { className?: stri
         } else {
             // Если ошибок нет, можно отправить форму
             // Логика для смены пароля
+            
+            //Тут надо получать и отправлять в data {"action":"newUserPassword","data":{"email":"dsf","phone":null,"newPassword":"12345"}}
+            
+            // sendingInfo(forReset.endpoint, {action: forReset.action, })
+            // .then(() => {
+            //     setSuccess(true);
+            //     setTimeout(() => {
+            //         // Закрыть модальное окно через 5 секунд
+            //         closeModal();
+            //     }, 5000);
+            // })
+            // .catch(() => {
+            //     setError("Ошибка удаления!");
+            //     setLoading(false);
+            // });
             console.log("Пароль успешно сменен!");
         }
     };

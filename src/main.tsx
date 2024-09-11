@@ -7,7 +7,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRequestPage from "./pages/create-request-page.tsx";
-import CreateRequestEditedPage from "./pages/create-request-edited-page.tsx";
+import CreateRequestEditedPage from "./pages/create-request-edited-page/create-request-edited-page.tsx";
 
 const userAuthorized = true; //Тут через post с AuthorizedToken будем получать данные авторизован ппользователь или нет
 
@@ -67,9 +67,9 @@ const router = createBrowserRouter([
       title="Типы устройств" 
       endpoint="crm/devices/ajax?action=getTypes"
       exceptions={["type"]}
-      endpointForAdd="crm/devices/ajax/post?action=insertDeviceType" 
-      endpointForEdit="тут будет url"
-      endpointForDelete="crm/devices/ajax/delete?action=deleteDeviceType"/> //Только id нужно
+      forAdd={{endpoint: "crm/devices/ajax/post", action: "insertDeviceType"}}
+      forEdit={{endpoint: "тут будет url", action: ""}}
+      forDelete={{endpoint: "crm/devices/ajax/delete", action: "deleteDeviceType"}}/> //Только id нужно
     ),
   },
   {
@@ -77,9 +77,9 @@ const router = createBrowserRouter([
     element: Wrapper(<TablePage 
       title="Марки устройства" 
       endpoint="crm/devices/ajax?action=getVendors" 
-      endpointForAdd="crm/devices/ajax/post?action=insertDeviceVendor"
-      endpointForEdit="тут будет url"
-      endpointForDelete="crm/devices/ajax/delete?action=deleteDeviceVendor" //Только id нужно
+      forAdd={{endpoint: "crm/devices/ajax/post", action: "insertDeviceVendor"}}
+      forEdit={{endpoint: "тут будет url", action: ""}}
+      forDelete={{endpoint: "crm/devices/ajax/delete", action: "deleteDeviceVendor"}} //Только id нужно
       />
     ),
   },
@@ -96,8 +96,8 @@ const router = createBrowserRouter([
       title="Физические лица" 
       endpoint="personal/users/ajax/get?action=getUsers" 
       exceptions={["id"]}
-      endpointForEdit="тут будет url"
-      endpointForResetPassword="personal/users/ajax/post?action=newUserPassword" //"data":{"email":"user@mail.ru","phone":null,"newPassword":"123"}
+      forEdit={{endpoint: "тут будет url", action: ""}}
+      forResetPassword={{endpoint: "personal/users/ajax/post", action: "newUserPassword"}} //"data":{"email":"user@mail.ru","phone":null,"newPassword":"123"}
       />
     ),
   },
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
     path: "directLegalEntities/",
     element: Wrapper(<TablePage 
       title="Юридические лица"
-      endpointForEdit="тут будет url"
+      forEdit={{endpoint: "тут будет url", action: ""}}
       endpoint="personal/company/ajax/get?action=getCompanies" 
       exceptions={["id"]}
       />

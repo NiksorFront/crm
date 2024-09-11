@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { deleteId } from "../../utils/api";
+import { deleteData } from "../../utils/api";
 
-type bodyDeleteType = { className?: string, endpointForDelete: string, id: string }
+type bodyDeleteType = { className?: string, forDelete: {endpoint: string, action: string}, id: number }
 
-export default function BodyDelete({ className = "", endpointForDelete, id }: bodyDeleteType) {
+export default function BodyDelete({ className = "", forDelete, id }: bodyDeleteType) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -13,7 +13,8 @@ export default function BodyDelete({ className = "", endpointForDelete, id }: bo
         setLoading(true);
         setError(null);
 
-        deleteId(endpointForDelete, id)
+        
+        deleteData(forDelete.endpoint, {action: forDelete.action, id: id})
             .then(() => {
                 setSuccess(true);
                 setTimeout(() => {
