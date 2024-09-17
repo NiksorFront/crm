@@ -12,7 +12,7 @@ export type ElementType = {
   valuesOrURLRequestValues?: Array<string> | string; //Для CombBox. Записываем или массив с данными или строку для получения данных
   //dependsOn?: string; //Содержание(value) и активность(disabled) зависят от содержимоного другого поля. Записвается имя этого поля
   dependsOn?: string | boolean;
-  submitUrl?: string; //Для BtnSubmit. Записывается ссылка для отправки данных на сервер
+  submitUrl?: { url: string; action: string }; //Для BtnSubmit. Записывается ссылка для отправки данных на сервер
   /*Написать тож самое, что выше, но для ссылки на получение информации о том какие данные нужны сыылки для отправки.*/
   acceptedValues?: Array<string>; //Для BtnPdf и BtnSubmit. Записывается список элементов из которых надо извлекать значения.
   elementsTabOne?: Record<string, ElementType>; //Для TwoTab. Спиосок компонентов типа ElementType, которые будут отображаться в 1м табе
@@ -36,6 +36,7 @@ type SettingsType = {
 
 interface storeType {
   settings: SettingsType;
+  newTabContent: (tabName: string, tabData: TabType) => void;
   newActiveTab: (tabName: string) => void;
   updateTitle: (newTitle: string) => void;
   updateTabTitle: (tabName: string, newTitle: string) => void;
@@ -96,7 +97,7 @@ export const useStore = create<storeType>((set) => ({
                 placeholder: "+7(913)666-01-12",
               },
               element4: {
-                id: "btnSearchInModal-user_id",
+                id: "btnSearchInModal-user______id",
                 pos: { row: 4, col: 1 },
                 title: "Выбрать из базы физ. лиц",
                 endpointForRequestDataTable:
@@ -135,7 +136,7 @@ export const useStore = create<storeType>((set) => ({
                 placeholder: "Иванов Иван Тимурович",
               },
               element6: {
-                id: "btnSearchInModal-user_id",
+                id: "btnSearchInModal-user______id",
                 pos: { row: 6, col: 1 },
                 title: "Выбрать из базы юр. лиц",
                 endpointForRequestDataTable:
@@ -170,7 +171,7 @@ export const useStore = create<storeType>((set) => ({
           },
           element7: {
             // id: "combBox-model",
-            id: "combBox-device_id",
+            id: "combBox-device", //combBox-device_id
             pos: { row: 4, col: 2 },
             title: "Модель",
             disabled: true,
@@ -187,10 +188,11 @@ export const useStore = create<storeType>((set) => ({
             id: "combBox-completeness",
             pos: { row: 6, col: 2 },
             title: "Комплектность",
-            valuesOrURLRequestValues: [
-              "Устройство",
-              "Разукомплектованное устройство",
-            ],
+            valuesOrURLRequestValues: ["0", "1"],
+            // valuesOrURLRequestValues: [
+            //   "Устройство",
+            //   "Разукомплектованное устройство",
+            // ],
           },
           element9: {
             id: "inptBig-problem_description",
@@ -202,40 +204,58 @@ export const useStore = create<storeType>((set) => ({
             pos: { row: 8, col: 2 },
             title: "Комментарий к заявке",
           },
+          element20: {
+            id: "combBox-user_id",
+            pos: { row: 9, col: 1 },
+            title: "Юзер id",
+            // value: "1",
+            valuesOrURLRequestValues: ["1", "2", "3"],
+            // dependsOn: "combBox-type",
+          },
+          element21: {
+            id: "combBox-device_id",
+            pos: { row: 9, col: 2 },
+            title: "Устройство id",
+            // value: "1",
+            valuesOrURLRequestValues: ["1", "2", "3"],
+            // dependsOn: "combBox-type",
+          },
           element11: {
             id: "btnPdf-pdf",
-            pos: { row: 9, col: 1 },
+            pos: { row: 10, col: 1 },
             acceptedValues: [
-              "inpt-email",
-              "inpt-fio",
-              "inpt-phone",
-              "combBox-type",
-              "combBox-vendor",
-              "combBox-model",
-              "inpt-serial",
-              "inptBig-description",
-              "inptBig-comment",
+              "email",
+              "fio",
+              "phone",
+              "type",
+              "vendor",
+              "model",
+              "serial",
+              "description",
+              "comment",
             ],
             title: "Скачать pdf",
             disabled: true,
-            submitUrl: "https://chet-tam.com",
+            submitUrl: { url: "https://chet-tam.com", action: "" },
           },
           element12: {
             id: "btnSubmit-1",
-            pos: { row: 9, col: 2 },
+            pos: { row: 10, col: 2 },
             acceptedValues: [
-              "inpt-user_id",
-              "combBox-device_id",
-              "combBox-completeness",
-              "inpt-mileage",
+              "user_id",
+              "device_id",
+              "completeness",
+              "mileage",
               // "combBox-model",
-              "inpt-serial_number",
-              "inptBig-problem_description",
-              "inptBig-comment",
+              "serial_number",
+              "problem_description",
+              "comment",
             ],
             title: "Отправить форму",
-            submitUrl:
-              "https://service-v.com/crm/tickets/ajax/post?action=createTicket",
+            submitUrl: {
+              url: "https://test-branch2.service-v.com/crm/tickets/ajax/post",
+              action: "createTicket",
+            },
           },
         },
       },
@@ -278,6 +298,17 @@ export const useStore = create<storeType>((set) => ({
       },
     },
   },
+
+  newTabContent: (tabName, tabData) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        tabs: {
+          ...state.settings.tabs,
+          [tabName]: tabData, // Добавляем новый ключ с именем tabName и значением tabData
+        },
+      },
+    })),
 
   newActiveTab: (tabName) => {
     set((state) => ({

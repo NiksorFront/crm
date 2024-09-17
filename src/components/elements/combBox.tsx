@@ -106,7 +106,7 @@ type typeCombBox = {
   valuesOrURLRequestValues?: Array<string> | string;
   style?: {};
   dependsOn?: string | boolean;
-  // tabWithInfo: string;
+  // tabWithInfo: string;x
 };
 
 function getRows(url: string){

@@ -112,7 +112,6 @@ export default function TabContentWithDragble({tab, tabName, rows, colums, showB
     
     
     Object.values(tab.elements!).forEach(element => {
-        console.log(element.pos);
         const [startRow, endRow] = element.pos.row.toString().split('/').map(Number);
         const col = element.pos.col;
         for (let row = startRow; row <= (endRow || startRow); row++) {

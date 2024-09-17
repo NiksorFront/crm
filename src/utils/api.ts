@@ -15,8 +15,19 @@ async function gettingData(endpoint: string) {
 }
 
 async function sendingInfo(endpoint: string, infoObject: object) {
-  console.log(JSON.stringify(infoObject));
+  console.log(infoObject);
   const res = await fetch(PATH + endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(infoObject),
+  });
+
+  return await getResponse(res);
+}
+
+async function sendingInfoFromButton(url: string, infoObject: object) {
+  // console.log(infoObject);
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(infoObject),
@@ -37,4 +48,4 @@ async function deleteData(endpoint: string, infoObject: object) {
   return await getResponse(res);
 }
 
-export { gettingData, sendingInfo, deleteData };
+export { gettingData, sendingInfo, sendingInfoFromButton, deleteData };

@@ -144,7 +144,7 @@ export default function CreateRequestEditedPage(){
                         // Object.keys(tabInfo.elements).forEach(key => console.log(tabInfo.elements[key].pos.row))
                         // Находим максимальное значение строки (pos.row) среди элементов
                         let maxRow = 0;
-                        tabInfo.elements && Object.keys(tabInfo.elements).forEach(key => {
+                        tabInfo.elements && Object.keys(tabInfo.elements).forEach(key => { //@ts-ignore
                             maxRow = (parseInt(tabInfo.elements[key].pos.row) > maxRow) ? parseInt(tabInfo.elements[key].pos.row) : maxRow;
                         })
                         

@@ -12,15 +12,16 @@ type typeBtnSubmit = {
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined
     id?: string;
     style?: {};
-    submitUrl: string;
+    submitUrl: { url: string; action: string };
     acceptedValues?: Array<string>;
     tabWithInfo: string;
     error?: string;
+    edited?: boolean;
   };
 
-export default function BtnSubmit({className, children, disabled, variant, id, style, submitUrl, acceptedValues=[], tabWithInfo, error="К кнопке не привязан ни один элемент для отправки"}: typeBtnSubmit){
+export default function BtnSubmit({className, children, disabled, variant, id, style, submitUrl, acceptedValues=[], tabWithInfo, error="К кнопке не привязан ни один элемент для отправки", edited=false}: typeBtnSubmit){
     const [errorText, setErrorText] = useState("");
-    const { settings, newTabContent } = useStore();
+    // const { settings, newTabContent } = useStore();
 
     const submit = () => {
         const currentTab = document.getElementById(`${tabWithInfo}`);
@@ -30,43 +31,43 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
         if (acceptedValues.length !== 0 && Array.isArray(acceptedValues)) {
             //Записываем все значения в data для передачи на сервер для добавления тикета в базу данных
             acceptedValues.forEach(value => {
-                value = value.split("-")[1];
                 const element = currentTab!.querySelector(`#${value}`);
                 if (element) {//@ts-ignore
                     data[value] = element.value ? element.value : element.textContent;
                 }else{
-                    setErrorText(`#${value}` + "- элемент не найден");
+                    setErrorText(`${value}` + "- элемент не найден");
                     setTimeout(() => setErrorText(""), 5000);
                 }
             });
-            console.log(data)
 
-            // sendingInfoFromButton(submitUrl, data);
+            sendingInfoFromButton(submitUrl.url, {action: submitUrl.action, ...data}).then(
+                (res) => setErrorText("Успешно")
+            ).catch(err => setErrorText("Ошибка запроса"))
             //!!!тут отправляется запрос!!!
 
-            //Перезаписываем элементы, сохраняя значения тех полей, что были отправлены на сервер и делаем их не редактируемыми больше(т.е. disabled).
-            settings.tabs![tabWithInfo].elements && Object.keys(settings.tabs![tabWithInfo].elements).forEach(elem =>{
-                if(acceptedValues.includes(settings.tabs![tabWithInfo].elements![elem].id)){
-                    const value = settings.tabs![tabWithInfo].elements![elem].id.split("-")[1];
-                    const element = currentTab!.querySelector(`#${value}`);
+            // //Перезаписываем элементы, сохраняя значения тех полей, что были отправлены на сервер и делаем их не редактируемыми больше(т.е. disabled).
+            // settings.tabs![tabWithInfo].elements && Object.keys(settings.tabs![tabWithInfo].elements).forEach(elem =>{
+            //     if(acceptedValues.includes(settings.tabs![tabWithInfo].elements![elem].id)){
+            //         const value = settings.tabs![tabWithInfo].elements![elem].id.split("-")[1];
+            //         const element = currentTab!.querySelector(`#${value}`);
                     
-                    if (element) {
-                        (newElements[elem] = {...settings.tabs![tabWithInfo].elements![elem], //@ts-ignore
-                        value: element.value ? element.value : element.textContent,
-                        disabled: true})
-                    }
-                }else if(settings.tabs![tabWithInfo].elements![elem].id === `btnSubmit-${id}`){
-                    newElements[elem] = {id: "btnNext-1", pos: { row: 9, col: 2 }, title: "Следующая страница",};
-                }else{
-                    newElements[elem] = {...settings.tabs![tabWithInfo].elements![elem], value: "", }
-                }
-            })
-            //Записываем это в настройках(в будущем отправляем на сервер)
-            newTabContent(tabWithInfo, {...settings.tabs![tabWithInfo],
-                                    activeTab: true,
-                                    dsbldTab: false,
-                                    elements: newElements
-                                    });
+            //         if (element) {
+            //             (newElements[elem] = {...settings.tabs![tabWithInfo].elements![elem], //@ts-ignore
+            //             value: element.value ? element.value : element.textContent,
+            //             disabled: true})
+            //         }
+            //     }else if(settings.tabs![tabWithInfo].elements![elem].id === `btnSubmit-${id}`){
+            //         newElements[elem] = {id: "btnNext-1", pos: { row: 9, col: 2 }, title: "Следующая страница",};
+            //     }else{
+            //         newElements[elem] = {...settings.tabs![tabWithInfo].elements![elem], value: "", }
+            //     }
+            // })
+            // //Записываем это в настройках(в будущем отправляем на сервер)
+            // newTabContent(tabWithInfo, {...settings.tabs![tabWithInfo],
+            //                         activeTab: true,
+            //                         dsbldTab: false,
+            //                         elements: newElements
+            //                         });
 
         }else{
             //"К кнопке не привязан ни один элемент для отправки"
@@ -78,7 +79,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
     }
 
     return <>
-        <Button id={id} className={`w-full ${className} ${errorText && "text-red-400"}`} disabled={disabled} variant={variant} type="submit" style={style} onClick={submit}>
+        <Button id={id} className={`w-full ${className} ${errorText && "text-red-400"}`} disabled={disabled} variant={variant} type="submit" style={style} onClick={() => !edited && submit()}>
             {errorText ? errorText : children}
         </Button>
     </>
