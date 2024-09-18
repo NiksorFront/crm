@@ -2,7 +2,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import {sendingInfo} from "../../utils/api";
+// import {sendingInfo} from "../../utils/api";
 
 type BodyResetPasswordType = {
     className?: string, 
@@ -10,6 +10,7 @@ type BodyResetPasswordType = {
 }
 
 export default function BodyResetPassword({ className="", forReset }: BodyResetPasswordType) {
+    console.log(forReset);
     //const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

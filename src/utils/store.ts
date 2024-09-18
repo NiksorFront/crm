@@ -1,4 +1,4 @@
-import { title } from "process";
+//@ts-nocheck
 import { create } from "zustand";
 
 export type ElementType = {
@@ -18,6 +18,7 @@ export type ElementType = {
   elementsTabOne?: Record<string, ElementType>; //Для TwoTab. Спиосок компонентов типа ElementType, которые будут отображаться в 1м табе
   elementsTabTwo?: Record<string, ElementType>; //Для TwoTab. Спиосок компонентов типа ElementType, которые будут отображаться во 2м табе
   endpointForRequestDataTable?: string;
+  forAddinDataTable?: { endpoint: string; action: string };
 };
 
 export type TabType = {
@@ -73,12 +74,12 @@ export const useStore = create<storeType>((set) => ({
         elements: {
           element1_3: {
             id: "twoTab-Ind_Leg", //Individul, Legal
-            pos: { row: "1/8", col: 1 }, //Пиздец короче с этими grid'ами
+            pos: { row: "1/12", col: 1 }, //Пиздец короче с этими grid'ами
             title: "Клиент",
             titles: "Физическое лицо - Юридическое лицо",
             elementsTabOne: {
               element1: {
-                id: "inpt-fio",
+                id: "inpt-full_name",
                 pos: { row: 1, col: 1 },
                 title: "ФИО",
                 placeholder: "Дуров Николас Стивович",
@@ -97,11 +98,15 @@ export const useStore = create<storeType>((set) => ({
                 placeholder: "+7(913)666-01-12",
               },
               element4: {
-                id: "btnSearchInModal-user______id",
+                id: "btnSearchInModal-user_id",
                 pos: { row: 4, col: 1 },
                 title: "Выбрать из базы физ. лиц",
                 endpointForRequestDataTable:
                   "personal/users/ajax/get?action=getUsers",
+                forAddinDataTable: {
+                  endpoint: "/personal/users/ajax/post",
+                  action: "preregisterUser",
+                },
               },
             },
             elementsTabTwo: {
@@ -112,7 +117,7 @@ export const useStore = create<storeType>((set) => ({
                 placeholder: "123456789012",
               },
               element2: {
-                id: "inpt-email",
+                id: "inpt-name",
                 pos: { row: 2, col: 1 },
                 title: "Наименование организации",
                 placeholder: "ООО Сервис-в",
@@ -130,17 +135,47 @@ export const useStore = create<storeType>((set) => ({
                 placeholder: "Директор",
               },
               element5: {
-                id: "inpt-legalform",
+                id: "inpt-directorFullName",
                 pos: { row: 5, col: 1 },
                 title: "ФИО руководителя",
                 placeholder: "Иванов Иван Тимурович",
               },
               element6: {
-                id: "btnSearchInModal-user______id",
+                id: "btnSearchInModal-company_id",
                 pos: { row: 6, col: 1 },
                 title: "Выбрать из базы юр. лиц",
                 endpointForRequestDataTable:
                   "personal/company/ajax/get?action=getCompanies",
+              },
+              element7: {
+                id: "inpt-full_name",
+                pos: { row: 1, col: 1 },
+                title: "ФИО контактного лица",
+                placeholder: "Дуров Николас Стивович",
+              },
+              element8: {
+                id: "inpt-email",
+                pos: { row: 2, col: 1 },
+                title: "Почта контактного лица",
+                placeholder: "vasya@mail.ru",
+              },
+              element9: {
+                id: "inpt-phone",
+                // id: "inpt-phone",
+                pos: { row: 3, col: 1 },
+                title: "Телефон контактного лица",
+                placeholder: "+7(913)666-01-12",
+              },
+              element10: {
+                id: "btnSearchInModal-user_id",
+                pos: { row: 4, col: 1 },
+                title: "Выбрать из базы физ. лиц",
+                endpointForRequestDataTable:
+                  "personal/users/ajax/get?action=getUsers",
+                forAddinDataTable: {
+                  endpoint: "/personal/users/ajax/post",
+                  action: "preregisterUser",
+                },
               },
             },
           },
@@ -204,17 +239,9 @@ export const useStore = create<storeType>((set) => ({
             pos: { row: 8, col: 2 },
             title: "Комментарий к заявке",
           },
-          element20: {
-            id: "combBox-user_id",
-            pos: { row: 9, col: 1 },
-            title: "Юзер id",
-            // value: "1",
-            valuesOrURLRequestValues: ["1", "2", "3"],
-            // dependsOn: "combBox-type",
-          },
           element21: {
             id: "combBox-device_id",
-            pos: { row: 9, col: 2 },
+            pos: { row: 10, col: 2 },
             title: "Устройство id",
             // value: "1",
             valuesOrURLRequestValues: ["1", "2", "3"],
@@ -222,7 +249,7 @@ export const useStore = create<storeType>((set) => ({
           },
           element11: {
             id: "btnPdf-pdf",
-            pos: { row: 10, col: 1 },
+            pos: { row: 12, col: 1 },
             acceptedValues: [
               "email",
               "fio",
@@ -240,9 +267,10 @@ export const useStore = create<storeType>((set) => ({
           },
           element12: {
             id: "btnSubmit-1",
-            pos: { row: 10, col: 2 },
+            pos: { row: 12, col: 2 },
             acceptedValues: [
               "user_id",
+              "company_id",
               "device_id",
               "completeness",
               "mileage",
@@ -504,4 +532,25 @@ export const useDepends = create<typeDepends>((set) => ({
   newTypee: (newTypeId, newTypeValue) =>
     set({ typeId: newTypeId, typeValue: newTypeValue }),
   newVendor: (newVendor) => set({ vendor: newVendor }),
+}));
+
+interface typeUpdate {
+  update: boolean;
+  updating: () => void;
+}
+
+//Костыль, чтобы не пробрасывать useState переменную для обновления таблицы через кучу Компонентов
+export const useCostil = create<typeUpdate>((set) => ({
+  update: true,
+  updating: () => set((state) => ({ update: !state.update })),
+}));
+
+interface typeTableRow {
+  row: Record<string, string>;
+  updateRowData: (row: Record<string, string>) => void;
+}
+
+export const useTableRow = create<typeTableRow>((set) => ({
+  row: {},
+  updateRowData: (row) => set(() => ({ row: row })),
 }));

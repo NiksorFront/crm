@@ -10,7 +10,7 @@ type typeDragble = {
 }
 
 function DragbleElement({element, tabName, onMoveElement, showBindings}: typeDragble){
-    const {updateElement} = useStore();
+    // const {updateElement} = useStore();
 
     const [{isDragging}, refDrag] = useDrag({
         type: "Element",

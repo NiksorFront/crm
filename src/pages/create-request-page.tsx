@@ -25,7 +25,7 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
     case "inptBig":
       return <InptBig title={element.title} id={id} placeholder={element.placeholder} disabled={element.disabled} style={elementPosition}/>
     case "combBox": 
-      return <CombBox title={element.title} id={id} placeholder={element.placeholder} valuesOrURLRequestValues={element.valuesOrURLRequestValues} disabled={element.disabled} dependsOn={element.dependsOn} tabWithInfo={tabName} style={elementPosition}/>
+      return <CombBox title={element.title} id={id} placeholder={element.placeholder} valuesOrURLRequestValues={element.valuesOrURLRequestValues} disabled={element.disabled} dependsOn={element.dependsOn} style={elementPosition}/>
     case "btnSubmit":
       return <BtnSubmit variant={"secondary"} id={id} style={elementPosition} acceptedValues={element.acceptedValues} submitUrl={element.submitUrl!} tabWithInfo={tabName}>{element.title}</BtnSubmit>
     case "btnNext":
@@ -35,7 +35,7 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
     case "twoTab":
       return <TwoTab title={element.title} titleOne={element.titles?.split('-')[0]} titleTwo={element.titles?.split('-')[1]} elementsTabOne={element.elementsTabOne} elementsTabTwo={element.elementsTabTwo} style={elementPosition}></TwoTab>
     case "btnSearchInModal":
-      return <BtnSearchInModal title={element.title} id={id} endpointForRequest={element.endpointForRequestDataTable} disabled={element.disabled} style={elementPosition}/>
+      return <BtnSearchInModal title={element.title} id={id} endpointForRequest={element.endpointForRequestDataTable} forAdd={element.forAddinDataTable} disabled={element.disabled} style={elementPosition}/>
     }
   //По этим typeElem и id надо найти элементы в базе элементов
   return <p key={id}>{`${typeElem} ${id}`}</p>
@@ -59,8 +59,9 @@ export default function CreateRequestPage() {
       newActiveTab(id);
     }
     else{
-      const currentText = target.textContent;
+      // const currentText = target.textContent;
       target.textContent = "Ошибка";
+      setErrorText("");
       //Сделать тест красным надо будет
       // setTimeout(() =>{
       //   e.target.textContent = currentText;
@@ -76,14 +77,14 @@ export default function CreateRequestPage() {
           <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500">
             {settings.tabs && Object.keys(settings.tabs).map(tab => 
               <li className="mr-2" key={tab}>
-                <Button id={`#${tab}`} disabled={settings.tabs![tab].dsbldTab} variant="secondary" onClick={switchTab} className={`border-solid border-y-2 border-gray-300 ${settings.tabs![tab].activeTab && "bg-green-100"} hover:text-gray-600 hover:border-gray-600`}>
+                <Button id={`#${tab}`} disabled={settings.tabs![tab].dsbldTab} variant="secondary" onClick={switchTab} className={`${settings.tabs![tab].activeTab && "bg-green-100"} rounded-t-xl rounded-b-none rounded-br-none hover:text-gray-600 hover:border-gray-600`}>
                   {errorText ? errorText : settings.tabs![tab].title}
                 </Button>
               </li>)}
           </ul>
         </div>
       </div>
-      <div className="p-4 my-2 mx-10 w-full bg-white rounded-lg shadow ">
+      <div className="p-4 mx-10 w-full bg-white rounded-lg shadow ">
           { 
             settings.tabs && Object.keys(settings.tabs).map(tab => {
               // console.log(tab);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   Drawer,
   DrawerContent,
-  DrawerFooter,
+  // DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -38,7 +38,7 @@ export default function ElementsLibraryDrawer({className, tabName, rws, clms, ch
   return (
     <Drawer>
       <DrawerTrigger
-        className={`${className} absolute bottom-0 left-0 m-10 text-wrap w-32 px-4 py-2 bg-gray-800 text-gray-200 font-medium text-s leading-tight rounded-lg shadow-sm hover:bg-gray-700 hover:shadow-md focus:bg-gray-700 focus:shadow-md focus:outline-none focus:ring-0 active:bg-gray-600 active:shadow-md transition duration-150 ease-in-out`}
+        className={`${className} fixed bottom-0 left-0 m-10 text-wrap w-32 px-4 py-2 bg-gray-800 text-gray-200 font-medium text-s leading-tight rounded-lg shadow-sm hover:bg-gray-700 hover:shadow-md focus:bg-gray-700 focus:shadow-md focus:outline-none focus:ring-0 active:bg-gray-600 active:shadow-md transition duration-150 ease-in-out`}
       >
         {children}
       </DrawerTrigger>

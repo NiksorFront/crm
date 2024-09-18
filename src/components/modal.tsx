@@ -1,14 +1,13 @@
-import { ReactElement, useRef } from "react"
+//@ts-nocheck
+import { useRef } from "react"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
     DialogClose,
   } from "./ui/dialog"
-import {Button} from "../components/ui/button.tsx";
 import BodyDelete from "./modal-bodys/body-delete.tsx";
 import BodyResetPassword from "./modal-bodys/body-reset-password.tsx";
 import BodyAdd from "./modal-bodys/body-add.tsx";
@@ -42,7 +41,7 @@ export default function Modal({children, title="", type, forSubmit, endpointForR
             {type === "delete" ? <BodyDelete className="w-full mt-5" forDelete={forSubmit!} id={parseInt(id)}/> : 
              type === "resetPassword" ? <BodyResetPassword forReset={forSubmit!} className="w-full mt-10 flex flex-wrap flex-end"/> :
              type === "add" ? <BodyAdd forSubmit={forSubmit!} onClose={()=>{refClose.current.click()}} className="flex flex-wrap gap-1 mt-5"/> :
-             type === "table" ? <TablePage endpoint={endpointForRequest!} title=""/> :
+             type === "table" ? <TablePage endpoint={endpointForRequest!} forAdd={forSubmit} title="" closeButton={<DialogClose ref={refClose}></DialogClose>}/> :
              <p>{forSubmit?.endpoint }</p>}
             <DialogClose ref={refClose}>
             </DialogClose>

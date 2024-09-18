@@ -22,19 +22,23 @@ import { Input } from "../../components/ui/input";
 
 import {useState} from "react";
 import { DataTablePagination } from "./data-table-pagination";
+import {useTableRow} from "../../utils/store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  closeButton?: React.ReactNode; //Нужно для закрытия модкалки, если таблица отображается в ней 
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  closeButton
 }: DataTableProps<TData, TValue>) {
   // const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<string>("");
+  const {updateRowData} = useTableRow();
 
   const table = useReactTable({
     data,
@@ -51,6 +55,12 @@ export function DataTable<TData, TValue>({
     },
     onGlobalFilterChange: setGlobalFilter,
   });
+
+  const doubleClickOnRow = (newDataRow: Record<string, string>) => {
+    // console.log(newDataRow);
+    updateRowData(newDataRow); //@ts-ignore
+    closeButton.ref.current.click();
+  }
 
   return (
     <div>
@@ -88,6 +98,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onDoubleClick={() => closeButton && doubleClickOnRow(row.original!)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -1,3 +1,9 @@
-export default function BodyResetPassword({ className }: {
+type BodyResetPasswordType = {
     className?: string;
-}): import("react/jsx-runtime").JSX.Element;
+    forReset: {
+        endpoint: string;
+        action: string;
+    };
+};
+export default function BodyResetPassword({ className, forReset }: BodyResetPasswordType): import("react/jsx-runtime").JSX.Element;
+export {};

@@ -1,9 +1,17 @@
 type modalType = {
     children: React.ReactNode;
-    title: string;
+    title?: string;
     type: string;
-    endpointForSubmit: string;
+    forSubmit?: {
+        endpoint: string;
+        action: string;
+    };
+    endpointForRequest?: string;
     id?: number | string;
+    className?: string;
+    classNameTriger?: string;
+    disabledTriger?: boolean;
+    styleTriger?: {};
 };
-export default function Modal({ children, title, type, endpointForSubmit, id }: modalType): import("react/jsx-runtime").JSX.Element;
+export default function Modal({ children, title, type, forSubmit, endpointForRequest, id, className, classNameTriger, disabledTriger, styleTriger }: modalType): import("react/jsx-runtime").JSX.Element;
 export {};

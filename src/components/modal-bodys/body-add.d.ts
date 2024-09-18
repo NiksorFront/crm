@@ -1,7 +1,10 @@
 type BodyAddType = {
     className?: string;
-    endpointForSubmit: string;
+    forSubmit: {
+        endpoint: string;
+        action: string;
+    };
     onClose: () => void;
 };
-export default function BodyAdd({ className, endpointForSubmit, onClose }: BodyAddType): import("react/jsx-runtime").JSX.Element;
+export default function BodyAdd({ className, forSubmit, onClose }: BodyAddType): import("react/jsx-runtime").JSX.Element;
 export {};

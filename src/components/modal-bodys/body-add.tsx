@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { sendingInfo } from "../../utils/api";
+import { useCostil } from '@/utils/store';
 
 type BodyAddType = {
     className?: string;
@@ -18,6 +19,7 @@ export default function BodyAdd({ className, forSubmit, onClose }: BodyAddType) 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const {updating} = useCostil();
 
     const sendingType = async () => {
         setIsSubmitting(true);
@@ -26,9 +28,10 @@ export default function BodyAdd({ className, forSubmit, onClose }: BodyAddType) 
             //@ts-ignore
             await sendingInfo(forSubmit.endpoint, {action: forSubmit.action, display_name: ref.current.value });
             setSubmitSuccess(true);
-            setTimeout(() => onClose(), 3000);
+            updating(); //Обновляем таблицу с данными
+            setTimeout(() => onClose(), 2500);
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             setErrorMessage("Ошибка добавления!");
         } finally {
             setIsSubmitting(false);
@@ -42,7 +45,8 @@ export default function BodyAdd({ className, forSubmit, onClose }: BodyAddType) 
             //@ts-ignore
             await sendingInfo(forSubmit.endpoint, {action: forSubmit.action, name: ref.current.value, short_name: ref2.current.value });
             setSubmitSuccess(true);
-            setTimeout(() => onClose(), 3000);
+            updating(); //Обновляем таблицу с данными
+            setTimeout(() => onClose(), 2500);
         } catch (error) {
             setErrorMessage("Ошибка добавления! Возможно такой тип уже есть");
         } finally {

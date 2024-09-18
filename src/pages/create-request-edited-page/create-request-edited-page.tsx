@@ -1,5 +1,5 @@
 import {useStore} from "../../utils/store";
-import {useState} from "react";
+import { useState} from "react";
 import {Button} from "../../components/ui/button";
 import {Checkbox} from "../../components/ui/checkbox";
 import { TabType } from "../../utils/store";
@@ -7,18 +7,27 @@ import TabContentWithDragble from "./tab-content-with-dragble";
 import ElementsLibraryDrawer from "../../components/elements-library-drawer";
 import { X } from "lucide-react"; // Импорт иконки крестика
 
+
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import {sendingInfoFromButton} from "../../utils/api";
+// import { useQuery } from "react-query";
 
 export default function CreateRequestEditedPage(){
-    const { settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, updateTabColumns} = useStore();
+    const {settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, updateTabColumns} = useStore();
     const [isEditingTitle, setIsEditingTitle] = useState(false); // состояние для режима редактирования заголовка
     const [tempTitle, setTempTitle] = useState(settings.title); // временное значение заголовка
 
     const [customMaxRows, setCustomMaxRows] = useState<{ [key: string]: number }>({}); // Хранит maxRow для каждого таба
     const [showBindings, setShowBindings] = useState<boolean>(false); // состояние для чекбокса "просмотр привязок"
 
-  
+    
+    // const {isLoading, data, error} = useQuery(["puum", "crm/config/ajax/get?action=getByName&name=ultra"], () => gettingData("crm/config/ajax/get?action=getByName&name=ultra").then((res) => res))   
+    // // const {isLoading, data, error} = useQuery(["puum", "crm/tickets/ajax?action=getFreeTickets"], () => gettingData("crm/tickets/ajax?action=getFreeTickets").then((res) => res))   
+    // if(data){
+    //     console.log(data);
+    // }
+
     // Состояние для отслеживания редактируемого таба и его заголовка
     const [editingTab, setEditingTab] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState<string>("");
@@ -63,8 +72,15 @@ export default function CreateRequestEditedPage(){
         });
     };
 
+    const saveSettings = () => {
+        sendingInfoFromButton("https://test-branch2.service-v.com/crm/config/ajax/post", {action: "insert", name: "settings", config: settings});
+    }
+
     return(<>
-        <h1 className="text-2xl font-semibold mx-10 my-4">{"Настройки меню создания заявок"}</h1>
+        <div className="w-full flex font-semibold my-4 justify-between">
+            <h1 className="mx-10 text-2xl">Настройки меню создания заявок</h1>
+            <Button className="mx-10" variant={"outline"} onClick={saveSettings}>Сохранить</Button>
+        </div>
         <DndProvider backend={HTML5Backend}>
             <div className="flex flex-wrap"> 
                 {/* Проверка на режим редактирования */}
@@ -86,10 +102,10 @@ export default function CreateRequestEditedPage(){
                     {settings.title}
                 </h1>
                 )}
-                <div className="flex flex-wrap w-full ml-10 mr-auto">
+                <div className="flex flex-wrap w-full ml-10 mr-auto ">
                     <div className="">
                     <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500">
-                        {settings.tabs && Object.keys(settings.tabs).map((tab, id) => (
+                        {settings.tabs && Object.keys(settings.tabs).map((tab) => (
                             <li className="mr-2" key={tab}>
                                 {editingTab === tab ? (
                                     // Режим редактирования
@@ -106,11 +122,11 @@ export default function CreateRequestEditedPage(){
                                 ) : (
                                     // Обычный заголовок вкладки с двойным кликом для редактирования
                                     <Button
-                                        id={`#${tab}`}
-                                        variant="secondary"
-                                        onClick={switchTab}
-                                        onDoubleClick={() => {setEditingTab(tab); setNewTitle(settings.tabs![tab].title);}} // Двойной клик для редактирования
-                                        className={`relative border-solid border-y-2 border-gray-300 ${settings.tabs![tab].activeTab && "bg-green-100"} hover:text-gray-600 hover:border-gray-600`}
+                                    id={`#${tab}`}
+                                    variant="secondary"
+                                    onClick={switchTab}
+                                    onDoubleClick={() => {setEditingTab(tab); setNewTitle(settings.tabs![tab].title);}} // Двойной клик для редактирования
+                                        className={`relative ${settings.tabs![tab].activeTab && "bg-green-100"} rounded-t-xl rounded-b-none rounded-br-none  hover:text-gray-600 hover:border-gray-600`}
                                     >
                                         {settings.tabs![tab].title}
                                         <X size={16} className="absolute -top-2 -right-2 text-gray-500 hover:text-gray-700 bg-slate-200 border-2 rounded" onClick={() => handleRemoveTab(tab)} />
@@ -123,7 +139,7 @@ export default function CreateRequestEditedPage(){
                             <Button
                                 id="new_tab"
                                 variant="secondary"
-                                className={`border-solid border-y-2 border-gray-300 hover:text-gray-600 hover:border-gray-600`}
+                                className={`border-solid rounded-t-xl rounded-b-none rounded-br-none  hover:text-gray-600 hover:border-gray-600`}
                                 onClick={() => addNewTab()}
                             >
                                 +
@@ -132,7 +148,7 @@ export default function CreateRequestEditedPage(){
                     </ul>
                     </div>
                 </div>
-                <div className="p-4 my-2 mx-10 w-full bg-white rounded-lg shadow ">
+                <div className="p-4 mx-10 w-full bg-white rounded-lg shadow ">
                     { 
                         settings.tabs && Object.keys(settings.tabs).map(tab => {
 

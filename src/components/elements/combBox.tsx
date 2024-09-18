@@ -9,7 +9,7 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
+  // CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
@@ -110,7 +110,8 @@ type typeCombBox = {
 };
 
 function getRows(url: string){
-  const {isLoading, error, data} = useQuery(["dataType", url],
+  //{isLoading, error, data} 
+  const { data} = useQuery(["dataType", url],
                                             () => gettingData(url)
                                             .then(res => res)
                                             .catch((err) => err));
@@ -118,12 +119,14 @@ function getRows(url: string){
   return data?.map(row => {return {id: row.id, value: row.type, label: row.display_type}})
 }
 
+
 export default function CombBox({className, title, placeholder = "-", disabled, id, valuesOrURLRequestValues, style, dependsOn}: typeCombBox){
 
     if(dependsOn === "type"){
       const {typeId} = useDepends();
       if(typeId){
           const url = `/crm/devices/ajax?action=getVendorsByTypeId&type_id=${typeId}`;
+          console.log(url);
           // const {data} = useQuery(['dataVendor', url], () => gettingData(url).then(res => res));
           // console.log(data)
         }

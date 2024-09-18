@@ -225,7 +225,7 @@ export default function EditedElemnet({element, tabName, showBindings}: {element
                 //@ts-ignore
                 <div style={elementPosition}>
                     {bindingsLabel}
-                    <BtnSearchInModal title={element.title} id={id} endpointForRequest={element.endpointForRequestDataTable} disabled={element.disabled} />
+                    <BtnSearchInModal title={element.title} id={id} endpointForRequest={element.endpointForRequestDataTable} forAdd={element.forAddinDataTable} disabled={element.disabled} />
                 </div>
             );
         default:

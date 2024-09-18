@@ -1,8 +1,6 @@
 import { Button } from "../ui/button";
 import {sendingInfoFromButton} from "../../utils/api";
 import { useState } from "react";
-import {useStore} from "../../utils/store";
-import {ElementType} from "../../utils/store";
 
 type typeBtnSubmit = {
     className?: string;
@@ -26,7 +24,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
     const submit = () => {
         const currentTab = document.getElementById(`${tabWithInfo}`);
         let data = {};
-        let newElements: Record<string, ElementType> = {};
+        // let newElements: Record<string, ElementType> = {};
         
         if (acceptedValues.length !== 0 && Array.isArray(acceptedValues)) {
             //Записываем все значения в data для передачи на сервер для добавления тикета в базу данных
@@ -40,9 +38,9 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
                 }
             });
 
-            sendingInfoFromButton(submitUrl.url, {action: submitUrl.action, ...data}).then(
-                (res) => setErrorText("Успешно")
-            ).catch(err => setErrorText("Ошибка запроса"))
+            sendingInfoFromButton(submitUrl.url, {action: submitUrl.action, ...data})
+            .then(() => setErrorText("Успешно"))
+            .catch(() => setErrorText("Ошибка запроса"))
             //!!!тут отправляется запрос!!!
 
             // //Перезаписываем элементы, сохраняя значения тех полей, что были отправлены на сервер и делаем их не редактируемыми больше(т.е. disabled).

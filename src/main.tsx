@@ -38,7 +38,7 @@ createRoot(document.getElementById("header")!).render(<Header />);
 function Wrapper(element: React.ReactNode) {
   return (
     <>
-      <section id="menu" className="w-2/12 md:w-fit max-w-56 bg-slate-100">
+      <section id="menu" className="flex flex-wrap w-fit max-w-56 justify-start bg-slate-100">
         <MenuMain />
       </section>
       <section id="content" className="w-full h-full">
@@ -94,8 +94,9 @@ const router = createBrowserRouter([
     path: "directIndividuals/",
     element: Wrapper(<TablePage 
       title="Физические лица" 
-      endpoint="personal/users/ajax/get?action=getUsers" 
+      endpoint="crm/users/ajax/get?action=getUsers" 
       exceptions={["id"]}
+      forAdd={{endpoint: "crm/users/ajax/post", action: "preregisterUser"}}
       forEdit={{endpoint: "тут будет url", action: ""}}
       forResetPassword={{endpoint: "personal/users/ajax/post", action: "newUserPassword"}} //"data":{"email":"user@mail.ru","phone":null,"newPassword":"123"}
       />
@@ -106,7 +107,9 @@ const router = createBrowserRouter([
     element: Wrapper(<TablePage 
       title="Юридические лица"
       forEdit={{endpoint: "тут будет url", action: ""}}
-      endpoint="personal/company/ajax/get?action=getCompanies" 
+      // https://service-v.com/personal/company/ajax/get?action=getCompanyByInn&inn=7729784613
+      forAdd={{endpoint: "/personal/users/ajax/post", action: "preregisterUser"}}
+      endpoint="crm/company/ajax/get?action=getCompanies" 
       exceptions={["id"]}
       />
     ),

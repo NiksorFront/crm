@@ -1,12 +1,20 @@
-const PATH = "https://service-v.com/";
-// const PATHcrm = "https://service-v.com/crm/";
-// const PATH = "https://test-branch1.service-v.com/";
+//@ts-nocheck
+const PATH = "https://test-branch2.service-v.com/";
+// const PATHcostil = "https://service-v.com/"; //Только для GET запросов работает
 
 function getResponse(res) {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 }
 
 async function gettingData(endpoint: string) {
+  const res = await fetch(PATH + endpoint, {
+    method: "GET",
+  });
+
+  return await getResponse(res);
+}
+
+async function gettingDataCostil(endpoint: string) {
   const res = await fetch(PATH + endpoint, {
     method: "GET",
   });
@@ -48,4 +56,10 @@ async function deleteData(endpoint: string, infoObject: object) {
   return await getResponse(res);
 }
 
-export { gettingData, sendingInfo, sendingInfoFromButton, deleteData };
+export {
+  gettingData,
+  sendingInfo,
+  sendingInfoFromButton,
+  deleteData,
+  gettingDataCostil,
+};

@@ -1,11 +1,14 @@
 import {Fragment} from "react";
-import { Button } from "@/components/ui/button";
 import { Pencil, KeyRound, Trash2 } from "lucide-react";
 import Modal from "../../components/modal";
 
 function whatHeader(key: string): string {
   // prettier-ignore
   return key === "id" ? "номер" :
+        //  key === "user_id" ? "номер пользователя" :
+        //  key === "company_id" ? "номер компании" :
+         key === "user_id" ? "номер" :
+         key === "company_id" ? "номер" :
          key === "status" ? "cтатус" :
          key === "createdAt" ? "дата" :
          key === "device" ? "аппарат" :
@@ -42,7 +45,7 @@ function whatColor(key: string): object{
 
 
 //Это список приоритеных AccessorKey. Чем раньше стоит ключ, тем раньше мы его увидим в любой из таблиц 
-const priorityAccessorKey = ["id", "createdAt", "creator", "inn", "name", "full_name", "directorFullName", "phone", "email", "address", "short_name", "display_type", "device", "status", "kpp",];
+const priorityAccessorKey = ["company_id", "user_id", "id", "createdAt", "creator", "inn", "name", "full_name", "directorFullName", "phone", "email", "address", "short_name", "display_type", "device", "status", "kpp",];
 
 
 
