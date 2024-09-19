@@ -14,14 +14,6 @@ async function gettingData(endpoint: string) {
   return await getResponse(res);
 }
 
-async function gettingDataCostil(endpoint: string) {
-  const res = await fetch(PATH + endpoint, {
-    method: "GET",
-  });
-
-  return await getResponse(res);
-}
-
 async function sendingInfo(endpoint: string, infoObject: object) {
   console.log(infoObject);
   const res = await fetch(PATH + endpoint, {
@@ -33,10 +25,13 @@ async function sendingInfo(endpoint: string, infoObject: object) {
   return await getResponse(res);
 }
 
-async function sendingInfoFromButton(url: string, infoObject: object) {
-  // console.log(infoObject);
+async function sendingInfoFromButton(
+  url: string,
+  infoObject: object,
+  method: string = "POST",
+) {
   const res = await fetch(url, {
-    method: "POST",
+    method: method,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(infoObject),
   });

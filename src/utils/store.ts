@@ -1,5 +1,6 @@
-//@ts-nocheck
 import { create } from "zustand";
+import { gettingData } from "./api";
+import { title } from "process";
 
 export type ElementType = {
   id: string; //id состоит из двух частей: названия компонента и имени(реальному id)  Пример: Inpt-email, CombBox-type
@@ -37,6 +38,7 @@ type SettingsType = {
 
 interface storeType {
   settings: SettingsType;
+  getSettingsFromServer: () => void;
   newTabContent: (tabName: string, tabData: TabType) => void;
   newActiveTab: (tabName: string) => void;
   updateTitle: (newTitle: string) => void;
@@ -62,269 +64,23 @@ interface storeType {
 }
 
 export const useStore = create<storeType>((set) => ({
-  settings: {
-    title: "Создать тикет",
-    tabs: {
-      tab1: {
-        title: "Приёмка",
-        // pos: 0,
-        activeTab: true,
-        dsbldTab: false,
-        columns: 2,
-        elements: {
-          element1_3: {
-            id: "twoTab-Ind_Leg", //Individul, Legal
-            pos: { row: "1/12", col: 1 }, //Пиздец короче с этими grid'ами
-            title: "Клиент",
-            titles: "Физическое лицо - Юридическое лицо",
-            elementsTabOne: {
-              element1: {
-                id: "inpt-full_name",
-                pos: { row: 1, col: 1 },
-                title: "ФИО",
-                placeholder: "Дуров Николас Стивович",
-              },
-              element2: {
-                id: "inpt-email",
-                pos: { row: 2, col: 1 },
-                title: "Почта",
-                placeholder: "vasya@mail.ru",
-              },
-              element3: {
-                id: "inpt-phone",
-                // id: "inpt-phone",
-                pos: { row: 3, col: 1 },
-                title: "Телефон",
-                placeholder: "+7(913)666-01-12",
-              },
-              element4: {
-                id: "btnSearchInModal-user_id",
-                pos: { row: 4, col: 1 },
-                title: "Выбрать из базы физ. лиц",
-                endpointForRequestDataTable:
-                  "personal/users/ajax/get?action=getUsers",
-                forAddinDataTable: {
-                  endpoint: "/personal/users/ajax/post",
-                  action: "preregisterUser",
-                },
-              },
-            },
-            elementsTabTwo: {
-              element1: {
-                id: "inpt-inn",
-                pos: { row: 1, col: 1 },
-                title: "ИНН",
-                placeholder: "123456789012",
-              },
-              element2: {
-                id: "inpt-name",
-                pos: { row: 2, col: 1 },
-                title: "Наименование организации",
-                placeholder: "ООО Сервис-в",
-              },
-              element3: {
-                id: "inpt-legalform",
-                pos: { row: 3, col: 1 },
-                title: "Правовая форма",
-                placeholder: "общество с ограниченной ответственностью",
-              },
-              element4: {
-                id: "inpt-doljnost",
-                pos: { row: 4, col: 1 },
-                title: "Должность руководителя",
-                placeholder: "Директор",
-              },
-              element5: {
-                id: "inpt-directorFullName",
-                pos: { row: 5, col: 1 },
-                title: "ФИО руководителя",
-                placeholder: "Иванов Иван Тимурович",
-              },
-              element6: {
-                id: "btnSearchInModal-company_id",
-                pos: { row: 6, col: 1 },
-                title: "Выбрать из базы юр. лиц",
-                endpointForRequestDataTable:
-                  "personal/company/ajax/get?action=getCompanies",
-              },
-              element7: {
-                id: "inpt-full_name",
-                pos: { row: 1, col: 1 },
-                title: "ФИО контактного лица",
-                placeholder: "Дуров Николас Стивович",
-              },
-              element8: {
-                id: "inpt-email",
-                pos: { row: 2, col: 1 },
-                title: "Почта контактного лица",
-                placeholder: "vasya@mail.ru",
-              },
-              element9: {
-                id: "inpt-phone",
-                // id: "inpt-phone",
-                pos: { row: 3, col: 1 },
-                title: "Телефон контактного лица",
-                placeholder: "+7(913)666-01-12",
-              },
-              element10: {
-                id: "btnSearchInModal-user_id",
-                pos: { row: 4, col: 1 },
-                title: "Выбрать из базы физ. лиц",
-                endpointForRequestDataTable:
-                  "personal/users/ajax/get?action=getUsers",
-                forAddinDataTable: {
-                  endpoint: "/personal/users/ajax/post",
-                  action: "preregisterUser",
-                },
-              },
-            },
-          },
-          element4: {
-            id: "combBox-type",
-            pos: { row: 1, col: 2 },
-            title: "Тип устройства",
-            valuesOrURLRequestValues: "crm/devices/ajax?action=getTypes",
-            dependsOn: "type",
-          },
-          element5: {
-            id: "inpt-mileage",
-            pos: { row: 2, col: 2 },
-            title: "Пробег",
-            placeholder: "0",
-            dependsOn: true,
-            // dependsOn: "combBox-type",
-          },
-          element6: {
-            id: "combBox-vendor",
-            pos: { row: 3, col: 2 },
-            title: "Марка",
-            disabled: true,
-            valuesOrURLRequestValues:
-              "crm/devices/ajax?action=getVendorsByTypeId&type_id=1",
-            dependsOn: "type",
-            // dependsOn: "combBox-type",
-          },
-          element7: {
-            // id: "combBox-model",
-            id: "combBox-device", //combBox-device_id
-            pos: { row: 4, col: 2 },
-            title: "Модель",
-            disabled: true,
-            valuesOrURLRequestValues: ["1", "2", "3", "4", "5", "6"],
-            dependsOn: "vendor",
-            // dependsOn: "combBox-vendor",
-          },
-          element8: {
-            id: "inpt-serial_number",
-            pos: { row: 5, col: 2 },
-            title: "Серийный номер",
-          },
-          element13: {
-            id: "combBox-completeness",
-            pos: { row: 6, col: 2 },
-            title: "Комплектность",
-            valuesOrURLRequestValues: ["0", "1"],
-            // valuesOrURLRequestValues: [
-            //   "Устройство",
-            //   "Разукомплектованное устройство",
-            // ],
-          },
-          element9: {
-            id: "inptBig-problem_description",
-            pos: { row: 7, col: 2 },
-            title: "Описание проблемы",
-          },
-          element10: {
-            id: "inptBig-comment",
-            pos: { row: 8, col: 2 },
-            title: "Комментарий к заявке",
-          },
-          element21: {
-            id: "combBox-device_id",
-            pos: { row: 10, col: 2 },
-            title: "Устройство id",
-            // value: "1",
-            valuesOrURLRequestValues: ["1", "2", "3"],
-            // dependsOn: "combBox-type",
-          },
-          element11: {
-            id: "btnPdf-pdf",
-            pos: { row: 12, col: 1 },
-            acceptedValues: [
-              "email",
-              "fio",
-              "phone",
-              "type",
-              "vendor",
-              "model",
-              "serial",
-              "description",
-              "comment",
-            ],
-            title: "Скачать pdf",
-            disabled: true,
-            submitUrl: { url: "https://chet-tam.com", action: "" },
-          },
-          element12: {
-            id: "btnSubmit-1",
-            pos: { row: 12, col: 2 },
-            acceptedValues: [
-              "user_id",
-              "company_id",
-              "device_id",
-              "completeness",
-              "mileage",
-              // "combBox-model",
-              "serial_number",
-              "problem_description",
-              "comment",
-            ],
-            title: "Отправить форму",
-            submitUrl: {
-              url: "https://test-branch2.service-v.com/crm/tickets/ajax/post",
-              action: "createTicket",
-            },
-          },
-        },
-      },
-      tab2: {
-        title: "Диагностика",
-        // pos: 2,
-        columns: 2,
-        activeTab: false,
-        dsbldTab: true,
+  settings: { title: "Соединение с сервером..." },
+  // gettingData(
+  //   "crm/config/ajax/get?action=getByName&name=settings",
+  // ).then((res) => res),
 
-        elements: {
-          element1: {
-            id: "inpt-email",
-            pos: { row: 1, col: 1 },
-            title: "Таб-2",
-            placeholder: "vasya@mail.ru",
-          },
-          element2: {
-            id: "btnNext-1",
-            pos: { row: 2, col: 2 },
-            title: "следующая страница",
-            placeholder: "vasya@mail.ru",
-          },
-        },
-      },
-      tab3: {
-        title: "Проценка",
-        // pos: 3,
-        columns: 3,
-        activeTab: false,
-        dsbldTab: true,
-        elements: {
-          element1: {
-            id: "btnNext-1",
-            pos: { row: 1, col: 1 },
-            title: "следующая страница",
-            placeholder: "vasya@mail.ru",
-          },
-        },
-      },
-    },
+  getSettingsFromServer: async () => {
+    const results = await gettingData(
+      "crm/config/ajax/get?action=getByName&name=settings",
+    )
+      .then((res) => res)
+      .catch(() => {
+        title: "Ошибка получения данных";
+      });
+
+    set(() => ({
+      settings: results,
+    }));
   },
 
   newTabContent: (tabName, tabData) =>

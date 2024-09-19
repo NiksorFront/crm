@@ -1,5 +1,5 @@
 import {useStore} from "../../utils/store";
-import { useState} from "react";
+import {useEffect, useState} from "react";
 import {Button} from "../../components/ui/button";
 import {Checkbox} from "../../components/ui/checkbox";
 import { TabType } from "../../utils/store";
@@ -11,26 +11,25 @@ import { X } from "lucide-react"; // Импорт иконки крестика
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {sendingInfoFromButton} from "../../utils/api";
-// import { useQuery } from "react-query";
 
 export default function CreateRequestEditedPage(){
-    const {settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, updateTabColumns} = useStore();
+    const {settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, updateTabColumns, getSettingsFromServer} = useStore();
     const [isEditingTitle, setIsEditingTitle] = useState(false); // состояние для режима редактирования заголовка
     const [tempTitle, setTempTitle] = useState(settings.title); // временное значение заголовка
 
     const [customMaxRows, setCustomMaxRows] = useState<{ [key: string]: number }>({}); // Хранит maxRow для каждого таба
     const [showBindings, setShowBindings] = useState<boolean>(false); // состояние для чекбокса "просмотр привязок"
 
-    
-    // const {isLoading, data, error} = useQuery(["puum", "crm/config/ajax/get?action=getByName&name=ultra"], () => gettingData("crm/config/ajax/get?action=getByName&name=ultra").then((res) => res))   
-    // // const {isLoading, data, error} = useQuery(["puum", "crm/tickets/ajax?action=getFreeTickets"], () => gettingData("crm/tickets/ajax?action=getFreeTickets").then((res) => res))   
-    // if(data){
-    //     console.log(data);
-    // }
-
     // Состояние для отслеживания редактируемого таба и его заголовка
     const [editingTab, setEditingTab] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState<string>("");
+
+    const [buttonText, setButtonText] = useState<string>("Сохранить");
+
+    
+    useEffect(() => {
+        getSettingsFromServer()
+    }, []);
 
     const switchTab = (e: React.MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLElement; // Приводим e.target к HTMLElement
@@ -73,13 +72,19 @@ export default function CreateRequestEditedPage(){
     };
 
     const saveSettings = () => {
-        sendingInfoFromButton("https://test-branch2.service-v.com/crm/config/ajax/post", {action: "insert", name: "settings", config: settings});
+        setButtonText("Отправка..."),
+        sendingInfoFromButton("https://test-branch2.service-v.com/crm/config/ajax", {name: "settings", config: settings}, "PUT")
+        .then(() => setButtonText("Успешно"))
+        .catch(() => setButtonText("Ошибка"))
+        .finally(() => setTimeout(() => setButtonText("Сохранить"), 3500))
     }
 
     return(<>
         <div className="w-full flex font-semibold my-4 justify-between">
             <h1 className="mx-10 text-2xl">Настройки меню создания заявок</h1>
-            <Button className="mx-10" variant={"outline"} onClick={saveSettings}>Сохранить</Button>
+            <Button className={`mx-10 ${buttonText === "Успешно" && "text-green-500"} ${buttonText === "Ошибка" && "text-red-500"}`} variant={"outline"} onClick={saveSettings}>
+                {buttonText}
+            </Button>
         </div>
         <DndProvider backend={HTML5Backend}>
             <div className="flex flex-wrap"> 

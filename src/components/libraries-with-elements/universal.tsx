@@ -4,6 +4,7 @@ import InptBig from "../elements/inptBig";
 import CombBox from "../elements/combBox";
 import BtnSubmit from "../elements/btnSubmit";
 import BtnPdf from "../elements/btnPdf";
+import BtnNext from "../elements/btnNext";
 
 export default function Universal_elems({tabName, rws, clms,} : {tabName: string, rws: number, clms: number,}){
     const {settings, newElement } = useStore();
@@ -42,6 +43,9 @@ export default function Universal_elems({tabName, rws, clms,} : {tabName: string
           </div>
           <div className="w-80" onDoubleClick={() => handleDoubleClick('btnPdf', 'скачать pdf')}> 
             <BtnPdf variant={"outline"} pdfGenerateCode={() => console.log("генерация")}>скачать pdf</BtnPdf>
+          </div>
+          <div className="w-80" onDoubleClick={() => handleDoubleClick('btnNext', 'следующая страница')}> 
+            <BtnNext variant={"outline"} currentTab="Согласование">следующая страница</BtnNext>
           </div>
         </div>
     )

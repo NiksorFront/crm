@@ -41,6 +41,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
             sendingInfoFromButton(submitUrl.url, {action: submitUrl.action, ...data})
             .then(() => setErrorText("Успешно"))
             .catch(() => setErrorText("Ошибка запроса"))
+            .finally(() => setTimeout(() => setErrorText(""), 3000))
             //!!!тут отправляется запрос!!!
 
             // //Перезаписываем элементы, сохраняя значения тех полей, что были отправлены на сервер и делаем их не редактируемыми больше(т.е. disabled).
@@ -77,7 +78,7 @@ export default function BtnSubmit({className, children, disabled, variant, id, s
     }
 
     return <>
-        <Button id={id} className={`w-full ${className} ${errorText && "text-red-400"}`} disabled={disabled} variant={variant} type="submit" style={style} onClick={() => !edited && submit()}>
+        <Button id={id} className={`w-full ${className} ${errorText && "text-red-400"} ${errorText === "Успешно" && "text-green-500"}`} disabled={disabled} variant={variant} type="submit" style={style} onClick={() => !edited && submit()}>
             {errorText ? errorText : children}
         </Button>
     </>

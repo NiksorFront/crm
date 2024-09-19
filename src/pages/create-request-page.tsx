@@ -1,6 +1,5 @@
 import { useStore, TabType, ElementType,} from "@/utils/store";
-import "./create-request-pages.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { Button } from "@/components/ui/button";
 import Inpt from "@/components/elements/inpt";
 import InptBig from "@/components/elements/inptBig";
@@ -16,8 +15,6 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
   const [typeElem, id] = element.id.split("-")
 
   const elementPosition = {gridRow: `${element.pos.row}`, gridColumn: `${element.pos.col}`};
-  // const testPos = {gridRow: `1/5`, gridColumn: `${element.pos.col}`};
-  // console.log(element);
 
   switch(typeElem){
     case "inpt":
@@ -48,14 +45,19 @@ function TabContent({tab, tabName}: {tab: TabType, tabName:string}){
 }
 
 export default function CreateRequestPage() {
-  const { settings, newActiveTab } = useStore();
+  const { settings, newActiveTab, getSettingsFromServer } = useStore();
   const [errorText, setErrorText] = useState("");
+
+  useEffect(() => {
+    getSettingsFromServer()
+  }, [])
+
 
   const switchTab = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLElement; // Приводим e.target к HTMLElement
     const id = target.id.split("#")[1];
     if(id){
-      console.log("Переключение кайф")
+      // console.log("Переключение кайф")
       newActiveTab(id);
     }
     else{
@@ -87,7 +89,6 @@ export default function CreateRequestPage() {
       <div className="p-4 mx-10 w-full bg-white rounded-lg shadow ">
           { 
             settings.tabs && Object.keys(settings.tabs).map(tab => {
-              // console.log(tab);
               //@ts-ignore
               const tabInfo: TabType = settings.tabs[tab];
 
