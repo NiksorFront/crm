@@ -8,8 +8,11 @@ import BtnSubmit from "@/components/elements/btnSubmit";
 import BtnPdf from "@/components/elements/btnPdf";
 import BtnNext from "@/components/elements/btnNext";
 import TwoTab from "@/components/elements/twoTab";
+import Text from "@/components/elements/text.tsx";
+import InptDate from "@/components/elements/inptDate";
 
 import BtnSearchInModal from "../components/elements/btnSearchInModal.tsx";
+import ChckBox from "@/components/elements/chckBox.tsx";
 
 export function Element({element, tabName}: {element: ElementType, tabName: string}){
   const [typeElem, id] = element.id.split("-")
@@ -33,6 +36,12 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
       return <TwoTab title={element.title} titleOne={element.titles?.split('-')[0]} titleTwo={element.titles?.split('-')[1]} elementsTabOne={element.elementsTabOne} elementsTabTwo={element.elementsTabTwo} style={elementPosition}></TwoTab>
     case "btnSearchInModal":
       return <BtnSearchInModal title={element.title} id={id} endpointForRequest={element.endpointForRequestDataTable} forAdd={element.forAddinDataTable} disabled={element.disabled} style={elementPosition}/>
+    case "text":
+      return <Text title={element.title!} id={id} style={elementPosition} fntSize={element.fontSize} textAlign={element.align}/>
+    case "inptDate":
+      return <InptDate title={element.title} id={id} placeholder={element.placeholder} disabled={element.disabled} style={elementPosition}/>
+    case "chckBox":
+      return <ChckBox title={element.title} id={id} disabled={element.disabled} style={elementPosition} align={element.align}/>
     }
   //По этим typeElem и id надо найти элементы в базе элементов
   return <p key={id}>{`${typeElem} ${id}`}</p>

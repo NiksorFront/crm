@@ -1,6 +1,6 @@
 type typeInpt = {
   className?: string;
-  id: string;
+  id?: string;
   title: string;
   style?: {};
   fntSize?: string;

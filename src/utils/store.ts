@@ -20,6 +20,8 @@ export type ElementType = {
   elementsTabTwo?: Record<string, ElementType>; //Для TwoTab. Спиосок компонентов типа ElementType, которые будут отображаться во 2м табе
   endpointForRequestDataTable?: string;
   forAddinDataTable?: { endpoint: string; action: string };
+  fontSize?: string;
+  align?: string;
 };
 
 export type TabType = {
@@ -61,6 +63,7 @@ interface storeType {
     elementName: string,
     elementData: ElementType,
   ) => void;
+  deleteElement: (tabName: string, elementId: string) => void;
 }
 
 export const useStore = create<storeType>((set) => ({
@@ -269,6 +272,35 @@ export const useStore = create<storeType>((set) => ({
         },
       },
     }));
+  },
+
+  deleteElement: (tabName, elementId) => {
+    set((state) => {
+      const tab = state.settings.tabs?.[tabName];
+      if (!tab || !tab.elements) {
+        console.error(`Tab ${tabName} или его элементы не найдены`);
+        return state;
+      }
+
+      const updatedElements = Object.fromEntries(
+        Object.entries(tab.elements).filter(
+          ([key, element]) => element.id !== elementId,
+        ),
+      );
+
+      return {
+        settings: {
+          ...state.settings,
+          tabs: {
+            ...state.settings.tabs,
+            [tabName]: {
+              ...tab,
+              elements: updatedElements,
+            },
+          },
+        },
+      };
+    });
   },
 }));
 
