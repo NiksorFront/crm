@@ -141,7 +141,7 @@ export default function CombBox({className, title, placeholder = "-", disabled, 
                  ? valuesOrURLRequestValues?.map(row => {return {value: row, label: row}})
                  : getRows(valuesOrURLRequestValues!);
 
-    return <div className="flex flex-col gap-2" style={style}>
+    return <div className={`flex flex-col ${title && "gap-2"}`} style={style}>
         <Label htmlFor="email">{title}</Label>
         <ComboboxDemo id={id} className={`w-full ${className}`} placeholder={placeholder} disabled={disabled} rows={rows} dependsOn={dependsOn}/>
       </div>

@@ -15,7 +15,7 @@ import {sendingInfoFromButton} from "../../utils/api";
 export default function CreateRequestEditedPage(){
     const {settings, newActiveTab, updateTitle, addNewTab, removeTab, updateTabTitle, updateTabColumns, getSettingsFromServer} = useStore();
     const [isEditingTitle, setIsEditingTitle] = useState(false); // состояние для режима редактирования заголовка
-    const [tempTitle, setTempTitle] = useState(settings.title); // временное значение заголовка
+    const [tempTitle, setTempTitle] = useState(settings ? settings.title : ""); // временное значение заголовка
 
     const [customMaxRows, setCustomMaxRows] = useState<{ [key: string]: number }>({}); // Хранит maxRow для каждого таба
     const [showBindings, setShowBindings] = useState<boolean>(false); // состояние для чекбокса "просмотр привязок"
@@ -77,6 +77,12 @@ export default function CreateRequestEditedPage(){
         .then(() => setButtonText("Успешно"))
         .catch(() => setButtonText("Ошибка"))
         .finally(() => setTimeout(() => setButtonText("Сохранить"), 3500))
+    }
+
+    if(settings === undefined) {
+        return (<div className="flex flex-wrap"> 
+            <h1 className="text-2xl mx-10 my-8 w-full text-red-400">Проблемы соединения с сервером</h1>
+        </div>)
     }
 
     return(<>

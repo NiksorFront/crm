@@ -14,7 +14,7 @@ type typeBtnSubmit = {
     acceptedValues?: Array<string>;
     tabWithInfo: string;
     error?: string;
-    edited?: boolean;
+    edited?: boolean; //надо для того, чтобы во время редактирования не нажималась кнопка
   };
 
 export default function BtnSubmit({className, children, disabled, variant, id, style, submitUrl, acceptedValues=[], tabWithInfo, error="К кнопке не привязан ни один элемент для отправки", edited=false}: typeBtnSubmit){

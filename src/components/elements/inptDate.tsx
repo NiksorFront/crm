@@ -59,7 +59,7 @@ export default function InptDate({
   };
 
   return (
-    <div className="flex flex-col gap-2" style={style}>
+    <div className={`flex flex-col ${title && "gap-2"}`} style={style}>
       {title && <Label htmlFor={id}>{title}</Label>}
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>

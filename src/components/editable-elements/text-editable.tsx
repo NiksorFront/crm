@@ -35,7 +35,7 @@ export default function TextEditable({ element, tabName, style, xDeletions }: Ty
     return (
         <div style={style} className="relative w-full" onDoubleClick={() => setIsEditing(true)}>
             {xDeletions}
-            <Text title={tempTitle} id={id} fntSize={tempFontSize} textAlign={tempTextAlign} />
+            <Text title={tempTitle!} id={id} fntSize={tempFontSize} textAlign={tempTextAlign} />
             {isEditing && (
                 <div className="absolute top-full left-0 bg-white p-4 shadow-md rounded-md w-full z-10">
                     {/* Input для редактирования заголовка */}

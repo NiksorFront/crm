@@ -4,7 +4,7 @@ import InptEditable from "@/components/editable-elements/inpt-editable";
 import InptBigEditable from "@/components/editable-elements/inptBig-editable";
 import CombBox from "@/components/elements/combBox";
 import BtnSubmitEditable from "@/components/editable-elements/btnSubmit-editable";
-import BtnPdf from "@/components/elements/btnPdf";
+import BtnPdfEditable from "@/components/editable-elements/btnPdf-editable";
 import BtnNext from "@/components/elements/btnNext";
 import TwoTab from "@/components/elements/twoTab";
 import BtnSearchInModal from "@/components/elements/btnSearchInModal.tsx";
@@ -13,6 +13,7 @@ import ChckBoxEditable from "@/components/editable-elements/chckBox-editable";
 import {useStore} from "../../utils/store";
 import {X} from "lucide-react";
 import InptDateEditable from "@/components/editable-elements/inptDate-editable";
+import InptFileEditable from "@/components/editable-elements/inptFile-editable";
 
 
 
@@ -60,18 +61,7 @@ export default function EditedElemnet({element, tabName, showBindings}: {element
                 </div>
             );
         case "btnPdf":
-            return (
-                //@ts-ignore
-                <div style={elementPosition} className="flex flex-wrap w-full">
-                    {showBindings && <span className="pb-1 w-fit ml-auto mr-0 text-black text-right text-sm z-10" >
-                        {element.acceptedValues?.join(" ")}
-                    </span>}
-                    {xDeletions}
-                    <BtnPdf variant={"outline"} id={id} pdfGenerateCode={() => console.log("скачено")} disabled={element.disabled} edited={true}>
-                        {element.title}
-                    </BtnPdf>
-                </div>
-            );
+            return <BtnPdfEditable element={element} tabName={tabName} style={elementPosition} xDeletions={xDeletions} showBindings={showBindings} />
         case "twoTab":
             return (
                 //@ts-ignore
@@ -96,7 +86,9 @@ export default function EditedElemnet({element, tabName, showBindings}: {element
         case "inptDate":
             return <InptDateEditable element={element} tabName={tabName} style={elementPosition} xDeletions={xDeletions} bindingsLabel={bindingsLabel}/>
         case "chckBox":
-            return <ChckBoxEditable element={element} tabName={tabName} style={elementPosition} xDeletions={xDeletions} />
+            return <ChckBoxEditable element={element} tabName={tabName} style={elementPosition} xDeletions={xDeletions} /> //bindingsLabel={bindingsLabel}
+        case "inptFile":
+            return <InptFileEditable element={element} tabName={tabName} style={elementPosition} xDeletions={xDeletions} bindingsLabel={bindingsLabel}/>
         default:
             return (
                 //@ts-ignore

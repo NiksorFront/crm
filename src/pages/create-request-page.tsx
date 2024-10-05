@@ -10,6 +10,7 @@ import BtnNext from "@/components/elements/btnNext";
 import TwoTab from "@/components/elements/twoTab";
 import Text from "@/components/elements/text.tsx";
 import InptDate from "@/components/elements/inptDate";
+import InptFile from "@/components/elements/inptFile";
 
 import BtnSearchInModal from "../components/elements/btnSearchInModal.tsx";
 import ChckBox from "@/components/elements/chckBox.tsx";
@@ -31,7 +32,7 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
     case "btnNext":
       return <BtnNext variant={"secondary"} id={id} style={elementPosition} currentTab={tabName}>{element.title}</BtnNext>
     case "btnPdf":
-      return <BtnPdf variant={"outline"} id={id} pdfGenerateCode={() => console.log("скачено")} disabled={element.disabled} style={elementPosition}>{element.title}</BtnPdf>
+      return <BtnPdf variant={"outline"} id={id} namePdf={element.namePdf} disabled={element.disabled} style={elementPosition} tabWithInfo={tabName}>{element.title}</BtnPdf>
     case "twoTab":
       return <TwoTab title={element.title} titleOne={element.titles?.split('-')[0]} titleTwo={element.titles?.split('-')[1]} elementsTabOne={element.elementsTabOne} elementsTabTwo={element.elementsTabTwo} style={elementPosition}></TwoTab>
     case "btnSearchInModal":
@@ -42,6 +43,9 @@ export function Element({element, tabName}: {element: ElementType, tabName: stri
       return <InptDate title={element.title} id={id} placeholder={element.placeholder} disabled={element.disabled} style={elementPosition}/>
     case "chckBox":
       return <ChckBox title={element.title} id={id} disabled={element.disabled} style={elementPosition} align={element.align}/>
+    case "inptFile":
+      return <InptFile title={element.title} id={id} disabled={element.disabled} style={elementPosition} accept={element.accept}/>
+      
     }
   //По этим typeElem и id надо найти элементы в базе элементов
   return <p key={id}>{`${typeElem} ${id}`}</p>
@@ -80,9 +84,15 @@ export default function CreateRequestPage() {
     }
   }
 
+  if(settings === undefined) {
+    return (<div className="flex flex-wrap"> 
+      <h1 className="text-2xl mx-10 my-8 w-full text-red-400">Проблемы соединения с сервером</h1>
+    </div>)
+  }
+
   return (
     <div className="flex flex-wrap"> 
-      <h1 className="text-2xl mx-10 my-8 w-full">{settings.title}</h1>
+      <h1 className={`text-2xl mx-10 my-8 w-full ${!settings.title && "text-red-500"}`}>{settings.title ? settings.title : "Проблемы соединения с сервером"}</h1>
       <div className="flex flex-wrap w-full ml-10 mr-auto">
         <div className="">
           <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500">

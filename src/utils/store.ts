@@ -22,6 +22,8 @@ export type ElementType = {
   forAddinDataTable?: { endpoint: string; action: string };
   fontSize?: string;
   align?: string;
+  accept?: string; //Указание типов принимаемых файлов для InptFile.
+  namePdf?: string; //Указание имени пдф, которую надо сгенерировать.
 };
 
 export type TabType = {

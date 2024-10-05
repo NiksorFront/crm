@@ -54,7 +54,7 @@ export default function Inpt({className, title, placeholder = "", disabled, type
 
 
   return (
-    <div className="flex flex-col gap-2" style={style}>
+    <div className={`flex flex-col ${title && "gap-2"}`} style={style}>
       <Label htmlFor={`${id}`}>{title}</Label>
       <Input
         id={`${id}`}

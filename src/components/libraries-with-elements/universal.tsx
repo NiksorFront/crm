@@ -7,21 +7,35 @@ import BtnPdf from "../elements/btnPdf";
 import BtnNext from "../elements/btnNext";
 import Text from "../elements/text";
 import InptDate from "../elements/inptDate";
+import InptFile from "../elements/inptFile";
 import ChckBox from "../elements/chckBox";
 
 export default function Universal_elems({tabName, rws, clms,} : {tabName: string, rws: number, clms: number,}){
     const {settings, newElement } = useStore();
 
-    const handleDoubleClick = (componentName: string, title: string, placeholder: string = '',
+    const currentTab = document.getElementById(`${tabName}`);
+    const uniqueIndex = (id: string): string | undefined => {
+      let index = parseInt(id.replace(/\D+/g, '')) + 1;  // Удаляем все нецифровые символы и к нынешнему числу прибавляем 1
+      let newIdshnik = id.replace(/\d+/g, '') + index; //Удаляем все числовые символы и прибовляем новый индекс
+      if(currentTab!.querySelector(`#${newIdshnik}`)){
+        uniqueIndex(newIdshnik);
+      }else{
+        return newIdshnik;
+      }
+    }
+    const handleDoubleClick = (componentName: string, title: string, placeholder: string = '') => {
         //Текущие количество элементов в массиве
-        index: number = Object.keys(settings.tabs![tabName].elements!).length) => {
+        let idshnik = 'elem' + Object.keys(settings.tabs![tabName].elements!).length;
+        if(currentTab!.querySelector(`#${idshnik}`)){
+          idshnik = uniqueIndex(idshnik)!;
+        }
+
 
         const date = new Date();
         const milliseconds = date.getTime().toString();
         const elementName = "element" + milliseconds;
-        // console.log(elementName, `${componentName}-${index}`, { col: colums + 1, row: rows + 1 })
         const elementData = {
-          id: `${componentName}-${index}`,
+          id: `${componentName}-${idshnik}`,
           pos: { col: clms + 1, row: rws + 1},
           title: title,
           placeholder: placeholder,
@@ -50,10 +64,14 @@ export default function Universal_elems({tabName, rws, clms,} : {tabName: string
             <BtnSubmit variant={"outline"} submitUrl={{url:"", action: ""}} error="" tabWithInfo="" edited={true}>кнопка</BtnSubmit>
           </div>
           <div className="w-80" onDoubleClick={() => handleDoubleClick('btnPdf', 'скачать pdf')}> 
-            <BtnPdf variant={"outline"} pdfGenerateCode={() => console.log("генерация")}>скачать pdf</BtnPdf>
+            <BtnPdf variant={"outline"} tabWithInfo="" edited={true}>скачать pdf</BtnPdf>
           </div>
           <div className="w-80" onDoubleClick={() => handleDoubleClick('btnNext', 'следующая страница')}> 
             <BtnNext variant={"outline"} currentTab="Согласование">следующая страница</BtnNext>
+          </div>
+          <div className="w-80 relative">
+            <div className="absolute top-0 left-0 w-full h-full z-10" onDoubleClick={() => handleDoubleClick('inptFile', '')}></div>
+            <InptFile disabled={true}/>
           </div>
           <div className="w-80" onDoubleClick={() => handleDoubleClick('text', 'большой текст')}> 
             <Text title="большой текст"/>

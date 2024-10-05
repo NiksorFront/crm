@@ -16,7 +16,7 @@ type typeInpt = {
 };
 
 export default function ChckBox({className, title, disabled, id, style, value, align}: typeInpt) {
-    console.log(align);
+    // console.log(align);
     const aln = align === "лево" ? "mr-auto" :
                 align === "право" ? "ml-auto flex-row-reverse" : "mx-auto";
 
